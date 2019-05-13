@@ -1,0 +1,254 @@
+info:
+  description: API methods supporting searches
+  version: "1.0.0-oas3"
+  title: Search
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /search:
+    post:
+      summary: Performs a search and produces a search results set.
+      operationId: search
+      description: ''
+      requestBody:
+        description: Information defining the search to be performed.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: A search response
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          description: bad input parameter
+  /pool_results:
+    get:
+      summary: gets search results from a single pool
+      operationId: sourceSearch
+      description: ''
+      parameters:
+        - name: query
+          in: query
+          description: "user entered query"
+          schema:
+            type: string
+            example: "cows OR sheep"
+        - name: start
+          in: query
+          description: starting record to return
+          schema:              
+            type: int
+            example: 1
+            min: 0
+        - name: rows
+          in: query
+          description: number of records to return
+          schema:
+            type: int
+            example: 1
+      responses:
+        '200':
+          description: A set of search results
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResultSet'
+          
+  /pool_results/{id}:
+    get:
+      summary: gets detailed fields for a single record
+      operationId: resultDetails
+      parameters:
+        - name: id
+          in: path
+          description: ID of the record
+          required: true
+          schema:
+            type: string
+            example: u333
+      responses:
+        '200':
+          description: A single record
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+          
+  /pool_summary:
+    get:
+      summary: "This is implemented by each pool and is specific to a certain search. It provides summary information to be displayed in a sidebar."
+      description: "This endpoint will likely use the same query interface as '#/components/paths/pool_request'"
+      responses:
+        '200':
+          description: A search summary for a pool
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PoolSummary"
+      
+  /users/{id}:
+    get:
+      summary: gets user info and preferences
+      parameters:
+        - name: id
+          in: path
+          description: The user id
+          required: true
+          schema:
+            type: string
+            example: mst3k
+      responses:
+        '200':
+          description: User Info
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    
+components:
+  schemas:
+    SearchRequest:
+      description: >
+        All the information that defines a search.  Until more is decided
+        this only includes the users query and the specified search target.
+        In the future it will contain all the things associated with a user's
+        preferences, all the filters (facets) and other criteria that might
+        affect the targets searched, the subset return, the filters applied,
+        ranking, verbosity of returned results, etc.
+      type: object
+      properties:
+        query:
+          type: string
+          example: goats AND chickens
+        current_pool:
+          type: string
+          example: "Catalog"
+        start:
+          description: "Pagination: starting item for this result set"
+          type: integer
+        rows:
+          description: "Pagination: number of items for this result set"
+          type: integer
+        search_preferences:
+          description:   
+        
+          
+    SearchResponse:
+      type: object
+      properties:
+        actual_request:
+          $ref: '#/components/schemas/SearchRequest'
+        effective_request:
+          $ref: '#/components/schemas/SearchRequest'
+        results:
+          $ref: '#/components/schemas/SearchResultSet'
+        pool_summary_list:
+          $ref: '#/components/schemas/PoolSummaryList'
+          
+    SearchResultSet:
+      description: Results returned from a search of a single search target.
+      type: object
+      properties:
+        result_count: 
+          description: "Some implementations won't be able to tell you the result count, and will return -1 (meaning some results but unknown)"
+          required: false
+          type: integer
+          minimum: -1
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        filters:
+          $ref: '#/components/schemas/Filters'
+        record_set:
+          $ref: '#/components/schemas/RecordSet'
+
+          
+    RecordSet:
+      description: "A list of Records"
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/Record'
+        
+    Record:
+      description: "A single Record"
+      type: object
+      properties:
+        # more to come...
+        title:
+          type: string
+          
+    Pagination:
+      description: "Information needed to display pagination links"
+      properties:
+        start:
+          description: "The index of the first item on this page."
+          type: integer
+        rows: 
+          description: "The number of items per page"
+          type: integer
+        total:
+          description: "Total number of items"
+      
+    
+    Filters:
+      description: "Filters/faceting applied to a search"
+      
+    PoolSummaryList:
+      description: "A list of summaries for various pools"
+      type: array
+      items:
+        $ref: '#/components/schemas/PoolSummary'
+        
+    PoolSummary:
+      description: "Summary info for a given pool"
+      properties:
+        name:
+          description: "A displayable name for the pool"
+          example: "Catalog"
+          type: string
+        link:
+          description: "A link to more details about this pool (possibly external?)"
+          type: string
+        summary: 
+          description: "a summary of the current search applied to this pool"
+          example: "10 items found"
+          type: string
+    
+    User:
+      description: User account info and preferences
+      type: object
+      properties:
+        preferences:
+          $ref: '#/components/schemas/UserPreferences'
+        info:
+          $ref: '#/components/schemas/UserInfo'
+          
+    UserPreferences:
+      description: User UI preferences
+      # More to come
+      properties: 
+      
+    SearchPreferences:
+      description: 
+      properties:
+        default_search_pool:
+          description: "The default data source to search when another is not specified."
+          type: string
+        excluded_pools:
+          description: "Data sources to never(?) search"
+          type: array
+        default_sort:
+          description: "The default sort behavior"
+          type: string
+        
+    UserInfo:
+      description: User specific information from LDAP, Sirsi, etc
+      properties: {} #checkouts, ldap info, etc.
