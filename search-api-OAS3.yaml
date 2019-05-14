@@ -1,13 +1,10 @@
+openapi: 3.0.0
 info:
-  description: API methods supporting searches
-  version: "1.0.0-oas3"
-  title: Search
-  contact:
-    email: you@your-company.com
-  license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: "0.2"
+  title: 'Virgo Search API'
+  description: ''
 paths:
+
   /search:
     post:
       summary: Performs a search and produces a search results set.
@@ -27,40 +24,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SearchResponse'
-        '400':
-          description: bad input parameter
+
   /pool_results:
-    get:
+    post:
       summary: gets search results from a single pool
       operationId: sourceSearch
       description: ''
-      parameters:
-        - name: query
-          in: query
-          description: "user entered query"
-          schema:
-            type: string
-            example: "cows OR sheep"
-        - name: start
-          in: query
-          description: starting record to return
-          schema:              
-            type: int
-            example: 1
-            min: 0
-        - name: rows
-          in: query
-          description: number of records to return
-          schema:
-            type: int
-            example: 1
+      requestBody:
+        description: Information defining the search to be performed.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
       responses:
         '200':
-          description: A set of search results
+          description: A pool search result
           content: 
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchResultSet'
+                $ref: '#/components/schemas/PoolResult'
           
   /pool_results/{id}:
     get:
@@ -80,12 +63,18 @@ paths:
           content: 
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchResponse'
+                $ref: '#/components/schemas/Record'
           
   /pool_summary:
-    get:
+    post:
       summary: "This is implemented by each pool and is specific to a certain search. It provides summary information to be displayed in a sidebar."
-      description: "This endpoint will likely use the same query interface as '#/components/paths/pool_request'"
+      requestBody:
+        description: Information defining the search to be performed.
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
       responses:
         '200':
           description: A search summary for a pool
@@ -113,8 +102,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
     
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/jlj5aj/VirgoSearchAPI/0.2
 components:
   schemas:
+  
+    SearchOptions:
+      description: search options for a generic search
+      properties:
+        # more to come (fields, limits, stemming options, begins with/ends with/wildcard, etc.)
+        search_type:
+          type: string
+          example: basic, advanced
+        keyword:
+          type: string
+        author:
+          type: string
+        title:
+          type: string
+        subject:
+          type: string
+        sort_field:
+          type: string
+          example: title, author, subject, ...
+        sort_order:
+          type: string
+          example: asc, desc, none
+
     SearchRequest:
       description: >
         All the information that defines a search.  Until more is decided
@@ -126,65 +142,71 @@ components:
       type: object
       properties:
         query:
-          type: string
-          example: goats AND chickens
+          $ref: '#/components/schemas/SearchOptions'
         current_pool:
           type: string
           example: "Catalog"
-        start:
-          description: "Pagination: starting item for this result set"
-          type: integer
-        rows:
-          description: "Pagination: number of items for this result set"
-          type: integer
+        pagination:
+          $ref: '#/components/schemas/Pagination'
         search_preferences:
-          description:   
-        
-          
+          $ref: '#/components/schemas/SearchPreferences'
+
     SearchResponse:
+      description: Response to a search request.
       type: object
       properties:
         actual_request:
           $ref: '#/components/schemas/SearchRequest'
         effective_request:
           $ref: '#/components/schemas/SearchRequest'
-        results:
-          $ref: '#/components/schemas/SearchResultSet'
+        pool_result_list:
+          $ref: '#/components/schemas/PoolResultList'
         pool_summary_list:
           $ref: '#/components/schemas/PoolSummaryList'
-          
-    SearchResultSet:
+
+    PoolResult:
       description: Results returned from a search of a single search target.
       type: object
       properties:
         result_count: 
           description: "Some implementations won't be able to tell you the result count, and will return -1 (meaning some results but unknown)"
-          required: false
+          #required: false  # defining this seems to require it to be an array
           type: integer
           minimum: -1
         pagination:
           $ref: '#/components/schemas/Pagination'
         filters:
           $ref: '#/components/schemas/Filters'
-        record_set:
-          $ref: '#/components/schemas/RecordSet'
+        record_list:
+          $ref: '#/components/schemas/RecordList'
+        summary:
+          $ref: '#/components/schemas/PoolSummary'
 
-          
-    RecordSet:
+    PoolResultList:
+      description: list of search results
+      type: array
+      items:
+        $ref: '#/components/schemas/PoolResult'
+
+    Record:
+      description: "A single Record (partial or detailed)"
+      type: object
+      properties:
+        # more to come...
+        id:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+
+    RecordList:
       description: "A list of Records"
       type: array
       uniqueItems: true
       items:
         $ref: '#/components/schemas/Record'
-        
-    Record:
-      description: "A single Record"
-      type: object
-      properties:
-        # more to come...
-        title:
-          type: string
-          
+
     Pagination:
       description: "Information needed to display pagination links"
       properties:
@@ -196,19 +218,16 @@ components:
           type: integer
         total:
           description: "Total number of items"
-      
-    
+          type: integer
+
     Filters:
       description: "Filters/faceting applied to a search"
-      
-    PoolSummaryList:
-      description: "A list of summaries for various pools"
-      type: array
-      items:
-        $ref: '#/components/schemas/PoolSummary'
-        
+      type: object
+      properties: {}
+
     PoolSummary:
       description: "Summary info for a given pool"
+      type: object
       properties:
         name:
           description: "A displayable name for the pool"
@@ -221,7 +240,13 @@ components:
           description: "a summary of the current search applied to this pool"
           example: "10 items found"
           type: string
-    
+
+    PoolSummaryList:
+      description: "A list of summaries for various pools"
+      type: array
+      items:
+        $ref: '#/components/schemas/PoolSummary'
+
     User:
       description: User account info and preferences
       type: object
@@ -230,14 +255,16 @@ components:
           $ref: '#/components/schemas/UserPreferences'
         info:
           $ref: '#/components/schemas/UserInfo'
-          
+
     UserPreferences:
       description: User UI preferences
+      type: object
       # More to come
-      properties: 
-      
+      properties: {}
+
     SearchPreferences:
-      description: 
+      description: user search preferences
+      type: object
       properties:
         default_search_pool:
           description: "The default data source to search when another is not specified."
@@ -245,10 +272,13 @@ components:
         excluded_pools:
           description: "Data sources to never(?) search"
           type: array
+          items:
+              type: string
         default_sort:
           description: "The default sort behavior"
           type: string
-        
+
     UserInfo:
       description: User specific information from LDAP, Sirsi, etc
+      type: object
       properties: {} #checkouts, ldap info, etc.
