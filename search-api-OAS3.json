@@ -167,7 +167,10 @@
         "properties": {
           "search_type": {
             "type": "string",
-            "example": "basic, advanced"
+            "enum": [
+              "basic",
+              "advanced"
+            ]
           },
           "keyword": {
             "type": "string"
@@ -187,7 +190,11 @@
           },
           "sort_order": {
             "type": "string",
-            "example": "asc, desc, none"
+            "enum": [
+              "asc",
+              "desc",
+              "none"
+            ]
           }
         }
       },
