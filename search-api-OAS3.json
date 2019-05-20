@@ -214,16 +214,6 @@
         "description": "Response to a search request.",
         "type": "object",
         "properties": {
-          "confidence": {
-            "type": "string",
-            "description": "Indicator of the confidence that the given pool has relevant matches to the query. When a pool result set indicates \"exact\" confidence, that means the pool believes the query was a \"known item search\" and that that pool contains that item (which will be listed first).",
-            "enum": [
-              "low",
-              "medium",
-              "high",
-              "exact"
-            ]
-          },
           "actual_request": {
             "$ref": "#/components/schemas/SearchRequest"
           },
@@ -326,6 +316,16 @@
             "description": "a summary of the current search applied to this pool",
             "example": "10 items found",
             "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "description": "Indicator of the confidence that the given pool has relevant matches to the query. When a pool result set indicates \"exact\" confidence, that means the pool believes the query was a \"known item search\" and that that pool contains that item (which will be listed first).",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "exact"
+            ]
           }
         }
       },
