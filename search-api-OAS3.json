@@ -1,34 +1,34 @@
 {
-  "openapi" : "3.0.0",
-  "info" : {
-    "version" : "0.2",
-    "title" : "Virgo Search API",
-    "description" : ""
+  "openapi": "3.0.0",
+  "info": {
+    "version": "0.2",
+    "title": "Virgo Search API",
+    "description": ""
   },
-  "paths" : {
-    "/search" : {
-      "post" : {
-        "summary" : "Performs a search and produces a search results set.",
-        "operationId" : "search",
-        "description" : "",
-        "requestBody" : {
-          "description" : "Information defining the search to be performed.",
-          "required" : false,
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/SearchRequest"
+  "paths": {
+    "/search": {
+      "post": {
+        "summary": "Performs a search and produces a search results set.",
+        "operationId": "search",
+        "description": "",
+        "requestBody": {
+          "description": "Information defining the search to be performed.",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
               }
             }
           }
         },
-        "responses" : {
-          "200" : {
-            "description" : "A search response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SearchResponse"
+        "responses": {
+          "200": {
+            "description": "A search response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
                 }
               }
             }
@@ -36,29 +36,29 @@
         }
       }
     },
-    "/pool_results" : {
-      "post" : {
-        "summary" : "gets search results from a single pool",
-        "operationId" : "sourceSearch",
-        "description" : "",
-        "requestBody" : {
-          "description" : "Information defining the search to be performed.",
-          "required" : false,
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/SearchRequest"
+    "/pool_results": {
+      "post": {
+        "summary": "gets search results from a single pool",
+        "operationId": "sourceSearch",
+        "description": "",
+        "requestBody": {
+          "description": "Information defining the search to be performed.",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
               }
             }
           }
         },
-        "responses" : {
-          "200" : {
-            "description" : "A pool search result",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PoolResult"
+        "responses": {
+          "200": {
+            "description": "A pool search result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
                 }
               }
             }
@@ -66,27 +66,29 @@
         }
       }
     },
-    "/pool_results/{id}" : {
-      "get" : {
-        "summary" : "gets detailed fields for a single record",
-        "operationId" : "resultDetails",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "ID of the record",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "example" : "u333"
+    "/pool_results/{id}": {
+      "get": {
+        "summary": "gets detailed fields for a single record",
+        "operationId": "resultDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the record",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "u333"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "A single record",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Record"
+        ],
+        "responses": {
+          "200": {
+            "description": "A single record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Record"
                 }
               }
             }
@@ -94,27 +96,27 @@
         }
       }
     },
-    "/pool_summary" : {
-      "post" : {
-        "summary" : "This is implemented by each pool and is specific to a certain search. It provides summary information to be displayed in a sidebar.",
-        "requestBody" : {
-          "description" : "Information defining the search to be performed.",
-          "required" : false,
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/SearchRequest"
+    "/pool_summary": {
+      "post": {
+        "summary": "This is implemented by each pool and is specific to a certain search. It provides summary information to be displayed in a sidebar.",
+        "requestBody": {
+          "description": "Information defining the search to be performed.",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
               }
             }
           }
         },
-        "responses" : {
-          "200" : {
-            "description" : "A search summary for a pool",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PoolSummary"
+        "responses": {
+          "200": {
+            "description": "A search summary for a pool",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoolSummary"
                 }
               }
             }
@@ -122,26 +124,28 @@
         }
       }
     },
-    "/users/{id}" : {
-      "get" : {
-        "summary" : "gets user info and preferences",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "description" : "The user id",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "example" : "mst3k"
+    "/users/{id}": {
+      "get": {
+        "summary": "gets user info and preferences",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "mst3k"
+            }
           }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "User Info",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/User"
+        ],
+        "responses": {
+          "200": {
+            "description": "User Info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -150,222 +154,230 @@
       }
     }
   },
-  "servers" : [ {
-    "description" : "SwaggerHub API Auto Mocking",
-    "url" : "https://virtserver.swaggerhub.com/jlj5aj/VirgoSearchAPI/0.2"
-  } ],
-  "components" : {
-    "schemas" : {
-      "SearchOptions" : {
-        "description" : "search options for a generic search",
-        "properties" : {
-          "search_type" : {
-            "type" : "string",
-            "example" : "basic, advanced"
+  "servers": [
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/jlj5aj/VirgoSearchAPI/0.2"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "SearchOptions": {
+        "description": "search options for a generic search",
+        "properties": {
+          "search_type": {
+            "type": "string",
+            "example": "basic, advanced"
           },
-          "keyword" : {
-            "type" : "string"
+          "keyword": {
+            "type": "string"
           },
-          "author" : {
-            "type" : "string"
+          "author": {
+            "type": "string"
           },
-          "title" : {
-            "type" : "string"
+          "title": {
+            "type": "string"
           },
-          "subject" : {
-            "type" : "string"
+          "subject": {
+            "type": "string"
           },
-          "sort_field" : {
-            "type" : "string",
-            "example" : "title, author, subject, ..."
+          "sort_field": {
+            "type": "string",
+            "example": "title, author, subject, ..."
           },
-          "sort_order" : {
-            "type" : "string",
-            "example" : "asc, desc, none"
+          "sort_order": {
+            "type": "string",
+            "example": "asc, desc, none"
           }
         }
       },
-      "SearchRequest" : {
-        "description" : "All the information that defines a search.  Until more is decided this only includes the users query and the specified search target. In the future it will contain all the things associated with a user's preferences, all the filters (facets) and other criteria that might affect the targets searched, the subset return, the filters applied, ranking, verbosity of returned results, etc.\n",
-        "type" : "object",
-        "properties" : {
-          "query" : {
-            "$ref" : "#/components/schemas/SearchOptions"
+      "SearchRequest": {
+        "description": "All the information that defines a search.  Until more is decided this only includes the users query and the specified search target. In the future it will contain all the things associated with a user's preferences, all the filters (facets) and other criteria that might affect the targets searched, the subset return, the filters applied, ranking, verbosity of returned results, etc.\n",
+        "type": "object",
+        "properties": {
+          "query": {
+            "$ref": "#/components/schemas/SearchOptions"
           },
-          "current_pool" : {
-            "type" : "string",
-            "example" : "Catalog"
+          "current_pool": {
+            "type": "string",
+            "example": "Catalog"
           },
-          "pagination" : {
-            "$ref" : "#/components/schemas/Pagination"
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
           },
-          "search_preferences" : {
-            "$ref" : "#/components/schemas/SearchPreferences"
+          "search_preferences": {
+            "$ref": "#/components/schemas/SearchPreferences"
           }
         }
       },
-      "SearchResponse" : {
-        "description" : "Response to a search request.",
-        "type" : "object",
-        "properties" : {
-          "actual_request" : {
-            "$ref" : "#/components/schemas/SearchRequest"
+      "SearchResponse": {
+        "description": "Response to a search request.",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "type": "string",
+            "description": "Indicator of the confidence that the given pool has relevant matches to the query. When a pool result set indicates \"exact\" confidence, that means the pool believes the query was a \"known item search\" and that that pool contains that item (which will be listed first).",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "exact"
+            ]
           },
-          "effective_request" : {
-            "$ref" : "#/components/schemas/SearchRequest"
+          "actual_request": {
+            "$ref": "#/components/schemas/SearchRequest"
           },
-          "pool_result_list" : {
-            "$ref" : "#/components/schemas/PoolResultList"
+          "effective_request": {
+            "$ref": "#/components/schemas/SearchRequest"
           },
-          "pool_summary_list" : {
-            "$ref" : "#/components/schemas/PoolSummaryList"
+          "pool_result_list": {
+            "$ref": "#/components/schemas/PoolResultList"
+          },
+          "pool_summary_list": {
+            "$ref": "#/components/schemas/PoolSummaryList"
           }
         }
       },
-      "PoolResult" : {
-        "description" : "Results returned from a search of a single search target.",
-        "type" : "object",
-        "properties" : {
-          "result_count" : {
-            "description" : "Some implementations won't be able to tell you the result count, and will return -1 (meaning some results but unknown)",
-            "type" : "integer",
-            "minimum" : -1
+      "PoolResult": {
+        "description": "Results returned from a search of a single search target.",
+        "type": "object",
+        "properties": {
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
           },
-          "pagination" : {
-            "$ref" : "#/components/schemas/Pagination"
+          "filters": {
+            "$ref": "#/components/schemas/Filters"
           },
-          "filters" : {
-            "$ref" : "#/components/schemas/Filters"
+          "record_list": {
+            "$ref": "#/components/schemas/RecordList"
           },
-          "record_list" : {
-            "$ref" : "#/components/schemas/RecordList"
-          },
-          "summary" : {
-            "$ref" : "#/components/schemas/PoolSummary"
+          "summary": {
+            "$ref": "#/components/schemas/PoolSummary"
           }
         }
       },
-      "PoolResultList" : {
-        "description" : "list of search results",
-        "type" : "array",
-        "items" : {
-          "$ref" : "#/components/schemas/PoolResult"
+      "PoolResultList": {
+        "description": "list of search results",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PoolResult"
         }
       },
-      "Record" : {
-        "description" : "A single Record (partial or detailed)",
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "string"
+      "Record": {
+        "description": "A single Record (partial or detailed)",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
           },
-          "title" : {
-            "type" : "string"
+          "title": {
+            "type": "string"
           },
-          "author" : {
-            "type" : "string"
+          "author": {
+            "type": "string"
           }
         }
       },
-      "RecordList" : {
-        "description" : "A list of Records",
-        "type" : "array",
-        "uniqueItems" : true,
-        "items" : {
-          "$ref" : "#/components/schemas/Record"
+      "RecordList": {
+        "description": "A list of Records",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/Record"
         }
       },
-      "Pagination" : {
-        "description" : "Information needed to display pagination links",
-        "properties" : {
-          "start" : {
-            "description" : "The index of the first item on this page.",
-            "type" : "integer"
+      "Pagination": {
+        "description": "Information needed to display pagination links",
+        "properties": {
+          "start": {
+            "description": "The index of the first item on this page.",
+            "type": "integer"
           },
-          "rows" : {
-            "description" : "The number of items per page",
-            "type" : "integer"
+          "rows": {
+            "description": "The number of items per page",
+            "type": "integer"
           },
-          "total" : {
-            "description" : "Total number of items",
-            "type" : "integer"
+          "total": {
+            "description": "The total number of items. Some implementations won't be able to tell you the result count, and will return -1 (meaning some results but unknown)",
+            "type": "integer",
+            "minimum": -1
           }
         }
       },
-      "Filters" : {
-        "description" : "Filters/faceting applied to a search",
-        "type" : "object",
-        "properties" : { }
+      "Filters": {
+        "description": "Filters/faceting applied to a search",
+        "type": "object",
+        "properties": {}
       },
-      "PoolSummary" : {
-        "description" : "Summary info for a given pool",
-        "type" : "object",
-        "properties" : {
-          "name" : {
-            "description" : "A displayable name for the pool",
-            "example" : "Catalog",
-            "type" : "string"
+      "PoolSummary": {
+        "description": "Summary info for a given pool",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "A displayable name for the pool",
+            "example": "Catalog",
+            "type": "string"
           },
-          "link" : {
-            "description" : "A link to more details about this pool (possibly external?)",
-            "type" : "string"
+          "link": {
+            "description": "A link to more details about this pool (possibly external?)",
+            "type": "string"
           },
-          "summary" : {
-            "description" : "a summary of the current search applied to this pool",
-            "example" : "10 items found",
-            "type" : "string"
+          "summary": {
+            "description": "a summary of the current search applied to this pool",
+            "example": "10 items found",
+            "type": "string"
           }
         }
       },
-      "PoolSummaryList" : {
-        "description" : "A list of summaries for various pools",
-        "type" : "array",
-        "items" : {
-          "$ref" : "#/components/schemas/PoolSummary"
+      "PoolSummaryList": {
+        "description": "A list of summaries for various pools",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PoolSummary"
         }
       },
-      "User" : {
-        "description" : "User account info and preferences",
-        "type" : "object",
-        "properties" : {
-          "preferences" : {
-            "$ref" : "#/components/schemas/UserPreferences"
+      "User": {
+        "description": "User account info and preferences",
+        "type": "object",
+        "properties": {
+          "preferences": {
+            "$ref": "#/components/schemas/UserPreferences"
           },
-          "info" : {
-            "$ref" : "#/components/schemas/UserInfo"
+          "info": {
+            "$ref": "#/components/schemas/UserInfo"
           }
         }
       },
-      "UserPreferences" : {
-        "description" : "User UI preferences",
-        "type" : "object",
-        "properties" : { }
+      "UserPreferences": {
+        "description": "User UI preferences",
+        "type": "object",
+        "properties": {}
       },
-      "SearchPreferences" : {
-        "description" : "user search preferences",
-        "type" : "object",
-        "properties" : {
-          "default_search_pool" : {
-            "description" : "The default data source to search when another is not specified.",
-            "type" : "string"
+      "SearchPreferences": {
+        "description": "user search preferences",
+        "type": "object",
+        "properties": {
+          "default_search_pool": {
+            "description": "The default data source to search when another is not specified.",
+            "type": "string"
           },
-          "excluded_pools" : {
-            "description" : "Data sources to never(?) search",
-            "type" : "array",
-            "items" : {
-              "type" : "string"
+          "excluded_pools": {
+            "description": "Data sources to never(?) search",
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           },
-          "default_sort" : {
-            "description" : "The default sort behavior",
-            "type" : "string"
+          "default_sort": {
+            "description": "The default sort behavior",
+            "type": "string"
           }
         }
       },
-      "UserInfo" : {
-        "description" : "User specific information from LDAP, Sirsi, etc",
-        "type" : "object",
-        "properties" : { }
+      "UserInfo": {
+        "description": "User specific information from LDAP, Sirsi, etc",
+        "type": "object",
+        "properties": {}
       }
     }
   }
