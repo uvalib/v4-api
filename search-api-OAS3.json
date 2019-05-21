@@ -36,37 +36,7 @@
         }
       }
     },
-    "/pool_results": {
-      "post": {
-        "summary": "gets search results from a single pool",
-        "operationId": "sourceSearch",
-        "description": "",
-        "requestBody": {
-          "description": "Information defining the search to be performed.",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SearchRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "A pool search result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SearchResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pool_results/{id}": {
+    "/search/{id}": {
       "get": {
         "summary": "gets detailed fields for a single record",
         "operationId": "resultDetails",
@@ -166,29 +136,23 @@
         "description": "search options for a generic search",
         "properties": {
           "keyword": {
-            "type": "string",
-            "required": false
+            "type": "string"
           },
           "author": {
-            "type": "string",
-            "required": false
+            "type": "string"
           },
           "title": {
-            "type": "string",
-            "required": false
+            "type": "string"
           },
           "subject": {
-            "type": "string",
-            "required": false
+            "type": "string"
           },
           "sort_field": {
             "type": "string",
-            "required": false,
             "example": "title, author, subject, ..."
           },
           "sort_order": {
             "type": "string",
-            "required": false,
             "enum": [
               "asc",
               "desc",
@@ -224,43 +188,41 @@
           },
           "results_pools": {
             "$ref": "#/components/schemas/PoolResultList"
-          },
+          }
         }
       },
       "PoolResult": {
         "description": "Results (or summary) returned from a search of a single pool.",
         "type": "object",
+        "required": [
+          "pool_id",
+          "service_url",
+          "pagination",
+          "confidence"
+        ],
         "properties": {
           "pool_id": {
             "description": "The identifier for the pool.",
             "example": "Catalog",
-            "type": "string",
-            "required": true
+            "type": "string"
           },
           "service_url": {
             "description": "The URL for this pool's search API.  Necessary in order to request subsequent pages or a full summary.",
-            "type": "string",
-            "required": true
+            "type": "string"
           },
           "summary": {
             "description": "A summary of the current search applied to this pool",
             "example": "10 items found",
-            "type": "string",
-            "required": false
+            "type": "string"
           },
           "pagination": {
-            "$ref": "#/components/schemas/Pagination",
-            "required": true
-            
+            "$ref": "#/components/schemas/Pagination"
           },
           "record_list": {
-            "$ref": "#/components/schemas/RecordList",
-            "required": false,
-            "description": "The record_list only appears in non-summary responses."
+            "$ref": "#/components/schemas/RecordList"
           },
           "filters": {
-            "$ref": "#/components/schemas/Filters",
-            "required": false
+            "$ref": "#/components/schemas/Filters"
           },
           "confidence": {
             "type": "string",
@@ -270,8 +232,7 @@
               "medium",
               "high",
               "exact"
-            ],
-            "required": true
+            ]
           }
         }
       },
@@ -298,7 +259,7 @@
         }
       },
       "RecordList": {
-        "description": "A list of Records",
+        "description": "A list of Records. The record_list only appears in non-summary responses.",
         "type": "array",
         "uniqueItems": true,
         "items": {
@@ -315,7 +276,7 @@
           "rows": {
             "description": "The number of items to request",
             "type": "integer"
-          },
+          }
         }
       },
       "Pagination": {
