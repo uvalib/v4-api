@@ -165,13 +165,6 @@
       "SearchOptions": {
         "description": "search options for a generic search",
         "properties": {
-          "search_type": {
-            "type": "string",
-            "enum": [
-              "basic",
-              "advanced"
-            ]
-          },
           "keyword": {
             "type": "string",
             "required": false
