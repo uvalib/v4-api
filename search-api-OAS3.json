@@ -8,9 +8,9 @@
   "paths": {
     "/search": {
       "post": {
-        "summary": "Performs a search and produces a search results set.",
+        "summary": "Performs an inter-pool search.",
         "operationId": "search",
-        "description": "",
+        "description": "Determines which pools to search, issues search or summary requests againsts them and sorts and aggregates those responses.",
         "requestBody": {
           "description": "Information defining the search to be performed.",
           "required": false,
@@ -98,7 +98,7 @@
     },
     "/pool_summary": {
       "post": {
-        "summary": "This is implemented by each pool and is specific to a certain search. It provides summary information to be displayed in a sidebar.",
+        "summary": "Performs a minimal query against the search source to get a quick estimate of the relevance of the pool's contents to the given query and to provide a basic summary of what might be available if searched.",
         "requestBody": {
           "description": "Information defining the search to be performed.",
           "required": false,
@@ -173,23 +173,29 @@
             ]
           },
           "keyword": {
-            "type": "string"
+            "type": "string",
+            "required": false
           },
           "author": {
-            "type": "string"
+            "type": "string",
+            "required": false
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "required": false
           },
           "subject": {
-            "type": "string"
+            "type": "string",
+            "required": false
           },
           "sort_field": {
             "type": "string",
+            "required": false,
             "example": "title, author, subject, ..."
           },
           "sort_order": {
             "type": "string",
+            "required": false,
             "enum": [
               "asc",
               "desc",
