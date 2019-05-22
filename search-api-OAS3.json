@@ -147,17 +147,8 @@
           "subject": {
             "type": "string"
           },
-          "sort_field": {
-            "type": "string",
-            "example": "title, author, subject, ..."
-          },
-          "sort_order": {
-            "type": "string",
-            "enum": [
-              "asc",
-              "desc",
-              "none"
-            ]
+          "sort": {
+            "$ref": "#/components/schemas/SortCriteria"
           }
         }
       },
@@ -335,8 +326,7 @@
             }
           },
           "default_sort": {
-            "description": "The default sort behavior",
-            "type": "string"
+            "$ref": "#/components/schemas/SortCriteria"
           }
         }
       },
@@ -344,6 +334,25 @@
         "description": "User specific information from LDAP, Sirsi, etc",
         "type": "object",
         "properties": {}
+      },
+      "SortCriteria": {
+        "description": "Criteria used for defining a sort",
+        "type": "object",
+        "properties": {
+          "field": {
+            "description": "The field to sort on",
+            "type": "string"
+          },
+          "order": {
+            "description": "The direction of the sort",
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc",
+              "none"
+            ]
+          }
+        }
       }
     }
   }
