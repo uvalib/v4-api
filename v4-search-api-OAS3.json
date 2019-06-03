@@ -1,11 +1,77 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "0.2",
+    "version": "0.3",
     "title": "Virgo Search API",
     "description": ""
   },
   "paths": {
+    "/pools/register": {
+      "post": {
+        "summary": "Register a pool for searching.",
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PoolInfo"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pool was successfully registered."
+          },
+          "500": {
+            "description": "Pool was not registered due to an error."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove a previously registered pool.",
+        "operationId": "unregister",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "url",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pool was successfully removed."
+          },
+          "400": {
+            "description": "Pool was not registered."
+          },
+          "500": {
+            "description": "Pool was not removed due to an error."
+          }
+        }
+      }
+    },
+    "/pools": {
+      "get": {
+        "summary": "Gets a listing of the currently registered pools.",
+        "operationId": "listPools",
+        "responses": {
+          "200": {
+            "description": "A successful response including all registered pools.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoolListing"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/search": {
       "post": {
         "summary": "Performs an inter-pool search.",
@@ -13,7 +79,6 @@
         "description": "Determines which pools to search, issues search or summary requests againsts them and sorts and aggregates those responses.",
         "requestBody": {
           "description": "Information defining the search to be performed.",
-          "required": false,
           "content": {
             "application/json": {
               "schema": {
@@ -24,7 +89,7 @@
         },
         "responses": {
           "200": {
-            "description": "A search response",
+            "description": "A successful response",
             "content": {
               "application/json": {
                 "schema": {
@@ -32,90 +97,13 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/search/{id}": {
-      "get": {
-        "summary": "gets detailed fields for a single record",
-        "operationId": "resultDetails",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of the record",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "u333"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A single record",
+          },
+          "400": {
+            "description": "A failed response resulting from a bad request.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Record"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pool_summary": {
-      "post": {
-        "summary": "Performs a minimal query against the search source to get a quick estimate of the relevance of the pool's contents to the given query and to provide a basic summary of what might be available if searched.",
-        "requestBody": {
-          "description": "Information defining the search to be performed.",
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SearchRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "A search summary for a pool",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PoolResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/{id}": {
-      "get": {
-        "summary": "gets user info and preferences",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The user id",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "mst3k"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User Info",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/SearchResponse"
                 }
               }
             }
@@ -132,32 +120,13 @@
   ],
   "components": {
     "schemas": {
-      "SearchOptions": {
-        "description": "search options for a generic search",
-        "properties": {
-          "keyword": {
-            "type": "string"
-          },
-          "author": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "subject": {
-            "type": "string"
-          },
-          "sort": {
-            "$ref": "#/components/schemas/SortCriteria"
-          }
-        }
-      },
       "SearchRequest": {
         "description": "All the information that defines a search.  Until more is decided this only includes the users query and the specified search target. In the future it will contain all the things associated with a user's preferences, all the filters (facets) and other criteria that might affect the targets searched, the subset return, the filters applied, ranking, verbosity of returned results, etc.\n",
         "type": "object",
         "properties": {
           "query": {
-            "$ref": "#/components/schemas/SearchOptions"
+            "type": "string",
+            "description": "\"A query formatted as defined by the specification here: https://github.com/uvalib/v4-api/tree/master/query-syntax\"\n"
           },
           "pagination": {
             "$ref": "#/components/schemas/PaginationRequest"
@@ -171,13 +140,19 @@
         "description": "Response to a search request.",
         "type": "object",
         "properties": {
-          "actual_request": {
+          "request": {
             "$ref": "#/components/schemas/SearchRequest"
           },
-          "effective_request": {
-            "$ref": "#/components/schemas/SearchRequest"
+          "pools_sarched": {
+            "type": "integer"
           },
-          "results_pools": {
+          "total_time_ms": {
+            "type": "integer"
+          },
+          "total_hits": {
+            "type": "integer"
+          },
+          "pool_results": {
             "$ref": "#/components/schemas/PoolResultList"
           }
         }
@@ -186,34 +161,24 @@
         "description": "Results (or summary) returned from a search of a single pool.",
         "type": "object",
         "required": [
-          "pool_id",
           "service_url",
           "pagination",
           "confidence"
         ],
         "properties": {
-          "pool_id": {
-            "description": "The identifier for the pool.",
-            "example": "Catalog",
-            "type": "string"
-          },
           "service_url": {
-            "description": "The URL for this pool's search API.  Necessary in order to request subsequent pages or a full summary.",
+            "description": "The URL for this pool's search API.  Necessary in order to request subsequent pages or a full summary and serves to uniquely identify the pool.",
             "type": "string"
           },
-          "summary": {
-            "description": "A summary of the current search applied to this pool",
-            "example": "10 items found",
-            "type": "string"
+          "elapsed_ms": {
+            "type": "integer",
+            "description": "The number of miliseconds it took to get the response from the pool search."
           },
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           },
           "record_list": {
             "$ref": "#/components/schemas/RecordList"
-          },
-          "filters": {
-            "$ref": "#/components/schemas/Filters"
           },
           "confidence": {
             "type": "string",
@@ -239,13 +204,12 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "description": "the identifier (unique within this pool) of the item"
           },
           "title": {
-            "type": "string"
-          },
-          "author": {
-            "type": "string"
+            "type": "string",
+            "description": "A title to display for the record."
           }
         }
       },
@@ -288,69 +252,50 @@
           }
         }
       },
-      "Filters": {
-        "description": "Filters/faceting applied to a search",
-        "type": "object",
-        "properties": {}
-      },
-      "User": {
-        "description": "User account info and preferences",
-        "type": "object",
-        "properties": {
-          "preferences": {
-            "$ref": "#/components/schemas/UserPreferences"
-          },
-          "info": {
-            "$ref": "#/components/schemas/UserInfo"
-          }
-        }
-      },
-      "UserPreferences": {
-        "description": "User UI preferences",
-        "type": "object",
-        "properties": {}
-      },
       "SearchPreferences": {
         "description": "user search preferences",
         "type": "object",
         "properties": {
-          "default_search_pool": {
-            "description": "The default data source to search when another is not specified.",
+          "target_pools": {
+            "description": "The URL of the pool to feature.  Specifying a valid pool URL will override the normal search behavior.",
             "type": "string"
           },
           "excluded_pools": {
-            "description": "Data sources to never(?) search",
+            "description": "URLs of pools the user wishes to ignore.  These pools will not be searched.",
             "type": "array",
             "items": {
               "type": "string"
             }
-          },
-          "default_sort": {
-            "$ref": "#/components/schemas/SortCriteria"
           }
         }
       },
-      "UserInfo": {
-        "description": "User specific information from LDAP, Sirsi, etc",
-        "type": "object",
-        "properties": {}
+      "PoolListing": {
+        "description": "All the pools that are currently registered and eligible for searching.",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PoolInfo"
+        }
       },
-      "SortCriteria": {
-        "description": "Criteria used for defining a sort",
-        "type": "object",
+      "PoolInfo": {
+        "description": "Information about a registered pool.",
+        "required": [
+          "url"
+        ],
         "properties": {
-          "field": {
-            "description": "The field to sort on",
+          "id": {
+            "type": "integer"
+          },
+          "name": {
             "type": "string"
           },
-          "order": {
-            "description": "The direction of the sort",
-            "type": "string",
-            "enum": [
-              "asc",
-              "desc",
-              "none"
-            ]
+          "description": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "alive": {
+            "type": "boolean"
           }
         }
       }
