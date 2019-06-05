@@ -20,10 +20,10 @@ LPAREN2 : '(' ->type(LPAREN);
 RPAREN2 : ')' ->type(RPAREN);
 LBRACKET : '[' ;
 RBRACKET : ']' ;
-COMMA : ',' ;
+// COMMA : ',' ;
 RBRACE : '}' -> popMode;
 BOOLEAN1 : ('AND'|'OR'|'NOT') ->type(BOOLEAN) ;
-SEARCH_WORD :  [\p{L}\p{Nl}\p{Nd}]+ ;
+SEARCH_WORD :  [-\p{L}\p{Nl}\p{Nd}\p{Mark}().,!?]+ ;
 WS2: WS -> skip;
 
 
