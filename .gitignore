@@ -1,0 +1,5 @@
+query-syntax/java/generated
+bin
+.settings
+.project
+.classpath
