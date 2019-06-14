@@ -10,6 +10,7 @@ TITLE : 'title';
 AUTHOR : 'author';
 SUBJECT : 'subject';
 KEYWORD : 'keyword';
+IDENTIFIER : 'identifier';
 LBRACE : '{' -> pushMode(SEARCH);
 WS1: WS -> skip;
 
@@ -20,10 +21,10 @@ LPAREN2 : '(' ->type(LPAREN);
 RPAREN2 : ')' ->type(RPAREN);
 LBRACKET : '[' ;
 RBRACKET : ']' ;
-// COMMA : ',' ;
+LBRACE1 : '{' -> pushMode(SEARCH), type(LBRACE);
 RBRACE : '}' -> popMode;
 BOOLEAN1 : ('AND'|'OR'|'NOT') ->type(BOOLEAN) ;
-SEARCH_WORD :  [-\p{L}\p{Nl}\p{Nd}\p{Mark}().,!?]+ ;
+SEARCH_WORD : (~([{}" \t\r\n]))+ ;
 WS2: WS -> skip;
 
 
