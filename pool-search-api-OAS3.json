@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "0.3",
+    "version": "0.4",
     "title": "Virgo Pool Search API",
     "description": ""
   },
@@ -11,6 +11,11 @@
         "summary": "Performs an pool search.",
         "operationId": "search",
         "description": "Searches this pool.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "description": "Information defining the search to be performed.",
           "content": {
@@ -41,18 +46,27 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
     }
   },
-  "servers": [
-    {
-      "description": "SwaggerHub API Auto Mocking",
-      "url": "https://virtserver.swaggerhub.com/jlj5aj/VirgoSearchAPI/0.2"
-    }
-  ],
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "TBD"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid"
+      }
+    },
     "schemas": {
       "SearchRequest": {
         "description": "All the information that defines a search.",

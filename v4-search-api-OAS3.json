@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "0.3",
+    "version": "0.4",
     "title": "Virgo Search API",
     "description": ""
   },
@@ -77,6 +77,11 @@
         "summary": "Performs an inter-pool search.",
         "operationId": "search",
         "description": "Determines which pools to search, issues search or summary requests againsts them and sorts and aggregates those responses.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "description": "Information defining the search to be performed.",
           "content": {
@@ -107,18 +112,27 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
     }
   },
-  "servers": [
-    {
-      "description": "SwaggerHub API Auto Mocking",
-      "url": "https://virtserver.swaggerhub.com/jlj5aj/VirgoSearchAPI/0.2"
-    }
-  ],
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "TBD"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid"
+      }
+    },
     "schemas": {
       "SearchRequest": {
         "description": "All the information that defines a search.  Until more is decided this only includes the users query and the specified search target. In the future it will contain all the things associated with a user's preferences, all the filters (facets) and other criteria that might affect the targets searched, the subset return, the filters applied, ranking, verbosity of returned results, etc.\n",
