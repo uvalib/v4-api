@@ -37,6 +37,14 @@ public class SimpleVisitor {
         {
             return (visitField_type( node) );
         }
+        else if (node instanceof VirgoQuery.Range_field_typeContext)
+        {
+            return (visitRange_field_type( node) );
+        }
+        else if (node instanceof VirgoQuery.Range_search_stringContext)
+        {
+            return (visitRange_search_string( node) );
+        }
         else if (node instanceof VirgoQuery.Search_stringContext)
         {
             return (visitSearch_string( node) );
@@ -98,6 +106,7 @@ public class SimpleVisitor {
     public Value visitField_query(RuleNode ctx) 
     { 
         // field_query : field_type COLON LBRACE search_string RBRACE
+        //             | range_field_type COLON LBRACE range_search_string RBRACE
         //   (_query_:"{!edismax qf=$title_qf pf=$title_pf}(certification of teachers )"
         
         StringBuilder sb = new StringBuilder();
@@ -130,22 +139,78 @@ public class SimpleVisitor {
         }
         else
         {
-            sb.append("_query_:\"{!edismax").append(fieldType).append("}(").append(query.toString()).append(")\"");
+            sb.append("_query_:\"{").append(fieldType).append("}(").append(query.toString()).append(")\"");
         }
     }
 
+    public Value visitRange_field_type(RuleNode ctx) 
+    { 
+        // range_field_type : DATE
+        String fieldType = ctx.getChild(0).toString();
+        String fieldname = "";
+        String df = ""; 
+        if (fieldType.equals("date"))
+        {
+            fieldname = "published_daterange"; 
+            df = "!lucene df="+ fieldname;
+        }
+        return new Value(df); 
+    }
+
+    
     public Value visitField_type(RuleNode ctx) 
     { 
-        // field_type : TITLE | AUTHOR | SUBJECT | KEYWORD
+        // field_type : TITLE | AUTHOR | SUBJECT | KEYWORD |  IDENTIFIER
         String fieldType = ctx.getChild(0).toString();
         String qf = "";
         String pf = ""; 
         if (fieldType.equals("title") || fieldType.equals("subject") || fieldType.equals("author") || fieldType.equals("identifier"))
         {
-            qf = " qf=$"+ fieldType + "_qf";
+            qf = "!edismax qf=$"+ fieldType + "_qf";
             pf = " pf=$"+ fieldType + "_pf";
         }
         return new Value(qf + pf); 
+    }
+    
+    
+    public Value visitRange_search_string(RuleNode ctx) 
+    { 
+        //    range_search_string : date_string TO date_string
+        //                        | BEFORE date_string
+        //                        | AFTER date_string
+        //                        | date_string
+        if (ctx.getChildCount() == 1)
+        {
+            return this.visit(ctx.getChild(0));
+        }
+        else
+        {
+            String rangeStart = "*";
+            String rangeEnd = "*";
+            if (ctx.getChildCount() == 3)
+            {
+                rangeStart = this.visit(ctx.getChild(0)).asString();
+                rangeEnd = this.visit(ctx.getChild(2)).asString();
+            }
+            else if (ctx.getChildCount() == 2)
+            {
+                String value = this.visit(ctx.getChild(1)).asString();
+                if (ctx.getChild(0) instanceof TerminalNode)
+                {
+                    TerminalNode tn = (TerminalNode)ctx.getChild(0);
+                    if (tn.getSymbol().getType() == VirgoQueryLexer.BEFORE)
+                    {
+                        rangeEnd = value;
+                    }
+                    else
+                    {
+                        rangeStart = value;
+                    }
+                }
+            }
+     //       return new Value("[\\\""+rangeStart+"\\\" TO \\\""+rangeEnd+"\\\"]");
+            return new Value("["+rangeStart+" TO "+rangeEnd+"]");
+        }
     }
     
     public Value visitSearch_string(RuleNode ctx) 
@@ -193,6 +258,8 @@ public class SimpleVisitor {
             return new Value("\\\"");
         else if (node.getSymbol().getType() == VirgoQueryLexer.BOOLEAN)
             return new Value(" "+ node.getText() + " ");
+        else if (node.getSymbol().getType() == VirgoQueryLexer.DATE_STRING)
+            return new Value(node.getText().replace('/', '-'));
         return new Value(node.getText());
     }
 }

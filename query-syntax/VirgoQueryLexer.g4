@@ -11,6 +11,7 @@ AUTHOR : 'author';
 SUBJECT : 'subject';
 KEYWORD : 'keyword';
 IDENTIFIER : 'identifier';
+DATE : 'date' -> pushMode(DATE_MODE);
 LBRACE : '{' -> pushMode(SEARCH);
 WS1: WS -> skip;
 
@@ -27,4 +28,14 @@ BOOLEAN1 : ('AND'|'OR'|'NOT') ->type(BOOLEAN) ;
 SEARCH_WORD : (~([{}" \t\r\n]))+ ;
 WS2: WS -> skip;
 
+mode DATE_MODE;
+
+COLON2 : ':' ->type(COLON);
+TO : ('TO'|'--');
+AFTER : ('AFTER'|'>');
+BEFORE : ('BEFORE'|'<');
+DATE_STRING : ([-/0-9]+) ;
+LBRACE2 : '{' -> type(LBRACE);
+RBRACE1 : '}' -> popMode, type(RBRACE);
+WS3: WS -> skip;
 
