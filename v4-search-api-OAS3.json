@@ -6,61 +6,13 @@
     "description": ""
   },
   "paths": {
-    "/pools/register": {
-      "post": {
-        "summary": "Register a pool for searching.",
-        "operationId": "register",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PoolInfo"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Pool was successfully registered."
-          },
-          "500": {
-            "description": "Pool was not registered due to an error."
-          }
-        }
-      },
-      "delete": {
-        "summary": "Remove a previously registered pool.",
-        "operationId": "unregister",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "url",
-            "schema": {
-              "type": "string"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Pool was successfully removed."
-          },
-          "400": {
-            "description": "Pool was not registered."
-          },
-          "500": {
-            "description": "Pool was not removed due to an error."
-          }
-        }
-      }
-    },
     "/pools": {
       "get": {
-        "summary": "Gets a listing of the currently registered pools.",
+        "summary": "Gets information about all pools in the authoritative pool list.",
         "operationId": "listPools",
         "responses": {
           "200": {
-            "description": "A successful response including all registered pools.",
+            "description": "A successful response including the identification and status of each pool.",
             "content": {
               "application/json": {
                 "schema": {
@@ -284,14 +236,14 @@
         }
       },
       "PoolListing": {
-        "description": "All the pools that are currently registered and eligible for searching.",
+        "description": "All the pools that are in the authoritative pool list.",
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/PoolInfo"
         }
       },
       "PoolInfo": {
-        "description": "Information about a registered pool.",
+        "description": "Information about a pool.",
         "required": [
           "url"
         ],
