@@ -28,7 +28,7 @@
       "post": {
         "summary": "Performs an inter-pool search.",
         "operationId": "search",
-        "description": "Determines which pools to search, issues search or summary requests againsts them and sorts and aggregates those responses.",
+        "description": "Determines which pools to search, issues search requests against them and sorts and aggregates those responses.",
         "security": [
           {
             "bearerAuth": []
@@ -124,7 +124,7 @@
         }
       },
       "PoolResult": {
-        "description": "Results (or summary) returned from a search of a single pool.",
+        "description": "Results returned from a search of a single pool.",
         "type": "object",
         "required": [
           "service_url",
@@ -180,7 +180,7 @@
         }
       },
       "RecordList": {
-        "description": "A list of Records. The record_list only appears in non-summary responses.",
+        "description": "A list of Records.",
         "type": "array",
         "uniqueItems": true,
         "items": {
