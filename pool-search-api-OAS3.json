@@ -8,7 +8,7 @@
   "paths": {
     "/search": {
       "post": {
-        "summary": "Performs an pool search.",
+        "summary": "Performs a pool search.",
         "operationId": "search",
         "description": "Searches this pool.",
         "security": [
@@ -78,11 +78,89 @@
           },
           "pagination": {
             "$ref": "#/components/schemas/PaginationRequest"
+          },
+          "facets": {
+            "$ref": "#/components/schemas/FacetsRequest"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/FiltersRequest"
           }
         }
       },
+      "PaginationRequest": {
+        "description": "Information about the subset of the full results set is being requested.",
+        "properties": {
+          "start": {
+            "description": "The index of the first item to fetch.",
+            "type": "integer"
+          },
+          "rows": {
+            "description": "The number of items to request",
+            "type": "integer"
+          }
+        }
+      },
+      "FacetRequest": {
+        "description": "The information needed to request a single facet",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "description": "The name of this facet",
+            "type": "string"
+          },
+          "offset": {
+            "description": "The desired index of the first facet value",
+            "type": "integer"
+          },
+          "limit": {
+            "description": "The maximum number of facet values to return",
+            "type": "integer"
+          },
+          "sort": {
+            "description": "The desired sorting method for the facet values ()e.g. \"index\", \"count\")",
+            "type": "string"
+          }
+        }
+      },
+      "FacetsRequest": {
+        "description": "A list of facets being requested by the client",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/FacetRequest"
+        }
+      },
+      "FilterRequest": {
+        "description": "The information needed to request a single filter",
+        "type": "object",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "description": "The name of this filter (facet)",
+            "type": "string"
+          },
+          "value": {
+            "description": "The value to use for filtering",
+            "type": "string"
+          }
+        }
+      },
+      "FiltersRequest": {
+        "description": "The list of filters being requested by the client",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/FilterRequest"
+        }
+      },
       "PoolResult": {
-        "description": "Results (or summary) returned from a search of a single pool.",
+        "description": "Results returned from a search of a single pool.",
         "type": "object",
         "required": [
           "service_url",
@@ -99,6 +177,12 @@
           },
           "record_list": {
             "$ref": "#/components/schemas/RecordList"
+          },
+          "available_facets": {
+            "$ref": "#/components/schemas/AvailableFacets"
+          },
+          "facet_list": {
+            "$ref": "#/components/schemas/FacetList"
           },
           "confidence": {
             "type": "string",
@@ -127,24 +211,11 @@
         }
       },
       "RecordList": {
-        "description": "A list of Records. The record_list only appears in non-summary responses.",
+        "description": "A list of Records.",
         "type": "array",
         "uniqueItems": true,
         "items": {
           "$ref": "#/components/schemas/Record"
-        }
-      },
-      "PaginationRequest": {
-        "description": "Information about the subset of the full results set is being requested.",
-        "properties": {
-          "start": {
-            "description": "The index of the first item to fetch.",
-            "type": "integer"
-          },
-          "rows": {
-            "description": "The number of items to request",
-            "type": "integer"
-          }
         }
       },
       "Pagination": {
@@ -163,6 +234,71 @@
             "type": "integer",
             "minimum": -1
           }
+        }
+      },
+      "AvailableFacet": {
+        "description": "A single facet that can be requested",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of this facet",
+            "type": "string"
+          },
+          "type": {
+            "description": "The type of this facet (e.g. \"terms\")",
+            "type": "string"
+          },
+          "sort": {
+            "description": "The default sort for this facet (e.g. \"index\", \"count\")",
+            "type": "string"
+          }
+        }
+      },
+      "AvailableFacets": {
+        "description": "The list of facets that the pool supports and which can be requested by the client as a facet or filter",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/AvailableFacet"
+        }
+      },
+      "FacetBucket": {
+        "description": "A single bucket in a facet result",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "The value of this bucket",
+            "type": "string"
+          },
+          "count": {
+            "description": "The number of results in this bucket",
+            "type": "integer"
+          }
+        }
+      },
+      "FacetListItem": {
+        "description": "A single facet result",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of this facet",
+            "type": "string"
+          },
+          "buckets": {
+            "description": "The buckets that resulted from the application of this facet",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FacetBucket"
+            }
+          }
+        }
+      },
+      "FacetList": {
+        "description": "The list of facet results for facets requested by the client",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/FacetListItem"
         }
       }
     }
