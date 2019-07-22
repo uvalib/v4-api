@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "0.4",
+    "version": "0.5",
     "title": "Virgo Pool Search API",
     "description": ""
   },
@@ -120,7 +120,7 @@
             "type": "integer"
           },
           "sort": {
-            "description": "The desired sorting method for the facet values ()e.g. \"index\", \"count\")",
+            "description": "The desired sorting method for the facet values (e.g. \"index\", \"count\")",
             "type": "string"
           }
         }
