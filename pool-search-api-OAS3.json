@@ -126,7 +126,7 @@
         }
       },
       "FacetsRequest": {
-        "description": "A list of facets being requested by the client",
+        "description": "A list of facet fields being requested by the client.  To request all supported facet fields and their values (using default offset/limit/sort values), supply a single array item with a special name of \"all\".",
         "type": "array",
         "uniqueItems": true,
         "items": {
