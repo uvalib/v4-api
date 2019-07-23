@@ -236,30 +236,12 @@
           }
         }
       },
-      "AvailableFacet": {
-        "description": "A single facet that can be requested",
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of this facet",
-            "type": "string"
-          },
-          "type": {
-            "description": "The type of this facet (e.g. \"terms\")",
-            "type": "string"
-          },
-          "sort": {
-            "description": "The default sort for this facet (e.g. \"index\", \"count\")",
-            "type": "string"
-          }
-        }
-      },
       "AvailableFacets": {
         "description": "The list of facets that the pool supports and which can be requested by the client as a facet or filter",
         "type": "array",
         "uniqueItems": true,
         "items": {
-          "$ref": "#/components/schemas/AvailableFacet"
+          "type": "string"
         }
       },
       "FacetBucket": {
