@@ -196,17 +196,56 @@
           }
         }
       },
+      "RecordField": {
+        "description": "A single Field in a Record",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of this field"
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of this field.  If omitted or empty, \"string\" is assumed.",
+            "enum": [
+              "this_list_needs_definition",
+              "string",
+              "bool",
+              "int",
+              "identifier",
+              "title",
+              "url"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "The label to display for this field"
+          },
+          "value": {
+            "type": "object",
+            "description": "The value of this field.  This can be any valid JSON basic type (but will generally just be a string, bool, or int).",
+            "additionalProperties": true
+          },
+          "visibility": {
+            "type": "string",
+            "description": "Indicates where this field should be displayed in the client.  If omitted or empty, \"basic\" is assumed.",
+            "enum": [
+              "basic",
+              "detailed"
+            ]
+          }
+        }
+      },
       "Record": {
         "description": "A single Record (partial or detailed)",
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "the identifier (unique within this pool) of the item"
-          },
-          "title": {
-            "type": "string",
-            "description": "A title to display for the record."
+          "fields": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/components/schemas/RecordField"
+            }
           }
         }
       },
