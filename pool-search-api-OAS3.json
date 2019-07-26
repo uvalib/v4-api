@@ -174,29 +174,24 @@
           },
           "type": {
             "type": "string",
-            "description": "The type of this field.  If omitted or empty, \"string\" is assumed.",
+            "description": "The type of this field.",
             "enum": [
-              "this_list_needs_definition",
+              "FIXME",
               "string",
-              "bool",
-              "int",
-              "identifier",
-              "title",
               "url"
             ]
           },
           "label": {
             "type": "string",
-            "description": "The label to display for this field"
+            "description": "The label to display for this field."
           },
           "value": {
-            "type": "object",
-            "description": "The value of this field.  This can be any valid JSON basic type (but will generally just be a string, bool, or int).",
-            "additionalProperties": true
+            "type": "string",
+            "description": "The value of this field."
           },
           "visibility": {
             "type": "string",
-            "description": "Indicates where this field should be displayed in the client.  If omitted or empty, \"basic\" is assumed.",
+            "description": "Specifies the view in which this field should be displayed in the client.",
             "enum": [
               "basic",
               "detailed"
