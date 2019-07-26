@@ -177,7 +177,7 @@
             "description": "The type of this field.",
             "enum": [
               "FIXME",
-              "string",
+              "text",
               "url"
             ]
           },
