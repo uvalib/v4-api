@@ -79,8 +79,9 @@
           "pagination": {
             "$ref": "#/components/schemas/PaginationRequest"
           },
-          "facets": {
-            "$ref": "#/components/schemas/FacetsRequest"
+          "facet": {
+            "type": "string",
+            "description": "The facet being requested by the client.  This can either be a specific facet, or the special facet of \"all\" that requests all available facets."
           },
           "filters": {
             "$ref": "#/components/schemas/FiltersRequest"
@@ -98,39 +99,6 @@
             "description": "The number of items to request",
             "type": "integer"
           }
-        }
-      },
-      "FacetRequest": {
-        "description": "The information needed to request a single facet",
-        "type": "object",
-        "required": [
-          "name"
-        ],
-        "properties": {
-          "name": {
-            "description": "The name of this facet",
-            "type": "string"
-          },
-          "offset": {
-            "description": "The desired index of the first facet value",
-            "type": "integer"
-          },
-          "limit": {
-            "description": "The maximum number of facet values to return",
-            "type": "integer"
-          },
-          "sort": {
-            "description": "The desired sorting method for the facet values (e.g. \"index\", \"count\")",
-            "type": "string"
-          }
-        }
-      },
-      "FacetsRequest": {
-        "description": "A list of facet fields being requested by the client.  To request all supported facet fields and their values (using default offset/limit/sort values), supply a single array item with a special name of \"all\".",
-        "type": "array",
-        "uniqueItems": true,
-        "items": {
-          "$ref": "#/components/schemas/FacetRequest"
         }
       },
       "FilterRequest": {
