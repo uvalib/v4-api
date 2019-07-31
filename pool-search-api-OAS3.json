@@ -143,8 +143,8 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           },
-          "record_list": {
-            "$ref": "#/components/schemas/RecordList"
+          "group_list": {
+            "$ref": "#/components/schemas/GroupList"
           },
           "available_facets": {
             "$ref": "#/components/schemas/AvailableFacets"
@@ -218,6 +218,31 @@
         "uniqueItems": true,
         "items": {
           "$ref": "#/components/schemas/Record"
+        }
+      },
+      "Group": {
+        "description": "A single Grouped search result.",
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "The unique value for this group."
+          },
+          "count": {
+            "type": "integer",
+            "description": "The number of Records in this group."
+          },
+          "record_list": {
+            "$ref": "#/components/schemas/RecordList"
+          }
+        }
+      },
+      "GroupList": {
+        "description": "A list of Groups.",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/Group"
         }
       },
       "Pagination": {
