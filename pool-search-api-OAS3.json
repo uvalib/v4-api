@@ -140,6 +140,10 @@
             "description": "The URL for this pool's search API.  Necessary in order to request subsequent pages or a full summary and serves to uniquely identify the pool.",
             "type": "string"
           },
+          "elapsed_ms": {
+            "type": "integer",
+            "description": "The number of milliseconds the pool took to service the request, from time of receipt to time of response."
+          },
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           },
