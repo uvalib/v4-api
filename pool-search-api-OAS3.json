@@ -16,6 +16,17 @@
             "bearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "description": "The language in which the client is requesting to receive localized pool/facet/field labels.",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
         "requestBody": {
           "description": "Information defining the search to be performed.",
           "content": {
@@ -29,6 +40,15 @@
         "responses": {
           "200": {
             "description": "A successful response",
+            "headers": {
+              "Content-Language": {
+                "description": "The language in which the pool is returning pool/facet/field labels.",
+                "schema": {
+                  "type": "string"
+                },
+                "required": false
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
