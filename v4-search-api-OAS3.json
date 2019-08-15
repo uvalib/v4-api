@@ -26,7 +26,7 @@
             "description": "A successful response including the identification and status of each pool.",
             "headers": {
               "Content-Language": {
-                "description": "The language in which the search is returning pool names/descriptions.",
+                "description": "The language in which the service is returning pool names/descriptions.",
                 "schema": {
                   "type": "string"
                 },
@@ -58,7 +58,7 @@
           {
             "in": "header",
             "name": "Accept-Language",
-            "description": "The language in which the client is requesting to receive localized facet/field labels.",
+            "description": "The language in which the client is requesting to receive localized warnings, errors, and pool facet/field labels.",
             "schema": {
               "type": "string"
             },
@@ -80,7 +80,7 @@
             "description": "A successful response",
             "headers": {
               "Content-Language": {
-                "description": "The language in which the pool is returning pool/facet/field labels.",
+                "description": "The language in which the service is returning warnings and pool facet/field labels.",
                 "schema": {
                   "type": "string"
                 },
@@ -97,6 +97,15 @@
           },
           "400": {
             "description": "A failed response resulting from a bad request.",
+            "headers": {
+              "Content-Language": {
+                "description": "The language in which the service is returning an error.",
+                "schema": {
+                  "type": "string"
+                },
+                "required": false
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {

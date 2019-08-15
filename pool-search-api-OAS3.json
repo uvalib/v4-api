@@ -42,7 +42,7 @@
             "description": "A successful response",
             "headers": {
               "Content-Language": {
-                "description": "The language in which the pool is returning pool/facet/field labels.",
+                "description": "The language in which the service is returning pool/facet/field labels.",
                 "schema": {
                   "type": "string"
                 },
