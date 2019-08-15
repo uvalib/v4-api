@@ -186,8 +186,12 @@
         }
       },
       "Filter": {
-        "description": "A single filter.",
+        "description": "The information needed to request a single filter.",
         "type": "object",
+        "required": [
+          "name",
+          "value"
+        ],
         "properties": {
           "name": {
             "type": "string",
@@ -195,7 +199,7 @@
           },
           "value": {
             "type": "string",
-            "description": "The value of the facet the client wants to filter on."
+            "description": "The value of the facet to use for filtering."
           }
         }
       },
