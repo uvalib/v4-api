@@ -129,7 +129,7 @@
     },
     "schemas": {
       "SearchRequest": {
-        "description": "All the information that defines a search.  Until more is decided this only includes the users query and the specified search target. In the future it will contain all the things associated with a user's preferences, all the filters (facets) and other criteria that might affect the targets searched, the subset return, the filters applied, ranking, verbosity of returned results, etc.\n",
+        "description": "All the information that defines a search.  Until more is decided this only includes the users query, facets, filters, and the specified search target. In the future it will contain all the things associated with a user's preferences and other criteria that might affect the targets searched, the subset return, ranking, verbosity of returned results, etc.\n",
         "type": "object",
         "properties": {
           "query": {
