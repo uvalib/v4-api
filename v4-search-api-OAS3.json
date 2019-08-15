@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "0.4",
+    "version": "0.6",
     "title": "Virgo Search API",
     "description": ""
   },
@@ -105,13 +105,6 @@
                 },
                 "required": false
               }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SearchResponse"
-                }
-              }
             }
           },
           "401": {
@@ -141,10 +134,17 @@
         "properties": {
           "query": {
             "type": "string",
-            "description": "\"A query formatted as defined by the specification here: https://github.com/uvalib/v4-api/tree/master/query-syntax\"\n"
+            "description": "A query formatted as defined by the specification here: https://github.com/uvalib/v4-api/tree/master/query-syntax\n"
           },
           "pagination": {
-            "$ref": "#/components/schemas/PaginationRequest"
+            "$ref": "#/components/schemas/Pagination"
+          },
+          "facet": {
+            "type": "string",
+            "description": "Requests a single facet, or all facets supported by a pool if the special value \"all\" is provided."
+          },
+          "filters": {
+            "$ref": "#/components/schemas/Filters"
           },
           "search_preferences": {
             "$ref": "#/components/schemas/SearchPreferences"
@@ -158,9 +158,6 @@
           "request": {
             "$ref": "#/components/schemas/SearchRequest"
           },
-          "pools_sarched": {
-            "type": "integer"
-          },
           "total_time_ms": {
             "type": "integer"
           },
@@ -168,75 +165,14 @@
             "type": "integer"
           },
           "pool_results": {
-            "$ref": "#/components/schemas/PoolResultList"
+            "$ref": "#/components/schemas/PoolResults"
+          },
+          "warnings": {
+            "$ref": "#/components/schemas/Warnings"
           }
         }
       },
-      "PoolResult": {
-        "description": "Results returned from a search of a single pool.",
-        "type": "object",
-        "required": [
-          "service_url",
-          "pagination",
-          "confidence"
-        ],
-        "properties": {
-          "service_url": {
-            "description": "The URL for this pool's search API.  Necessary in order to request subsequent pages or a full summary and serves to uniquely identify the pool.",
-            "type": "string"
-          },
-          "elapsed_ms": {
-            "type": "integer",
-            "description": "The number of miliseconds it took to get the response from the pool search."
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/Pagination"
-          },
-          "record_list": {
-            "$ref": "#/components/schemas/RecordList"
-          },
-          "confidence": {
-            "type": "string",
-            "description": "Indicator of the confidence that the given pool has relevant matches to the query. When a pool result set indicates \"exact\" confidence, that means the pool believes the query was a \"known item search\" and that that pool contains that item (which will be listed first).",
-            "enum": [
-              "low",
-              "medium",
-              "high",
-              "exact"
-            ]
-          }
-        }
-      },
-      "PoolResultList": {
-        "description": "A list of search results (either complete or summarized) sorted from most to least relevant.",
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/PoolResult"
-        }
-      },
-      "Record": {
-        "description": "A single Record (partial or detailed)",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "the identifier (unique within this pool) of the item"
-          },
-          "title": {
-            "type": "string",
-            "description": "A title to display for the record."
-          }
-        }
-      },
-      "RecordList": {
-        "description": "A list of Records.",
-        "type": "array",
-        "uniqueItems": true,
-        "items": {
-          "$ref": "#/components/schemas/Record"
-        }
-      },
-      "PaginationRequest": {
+      "Pagination": {
         "description": "Information about the subset of the full results set is being requested.",
         "properties": {
           "start": {
@@ -249,33 +185,37 @@
           }
         }
       },
-      "Pagination": {
-        "description": "Information needed to display pagination links",
+      "Filter": {
+        "description": "A single filter.",
+        "type": "object",
         "properties": {
-          "start": {
-            "description": "The index of the first item on this page.",
-            "type": "integer"
+          "name": {
+            "type": "string",
+            "description": "The name of the facet the client wants to filter on."
           },
-          "rows": {
-            "description": "The number of items per page",
-            "type": "integer"
-          },
-          "total": {
-            "description": "The total number of items. Some implementations won't be able to tell you the result count, and will return -1 (meaning some results but unknown)",
-            "type": "integer",
-            "minimum": -1
+          "value": {
+            "type": "string",
+            "description": "The value of the facet the client wants to filter on."
           }
+        }
+      },
+      "Filters": {
+        "description": "A list of filters to apply to a search.  These will be facet names and values that the client has received in a previous search.",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/Filter"
         }
       },
       "SearchPreferences": {
         "description": "user search preferences",
         "type": "object",
         "properties": {
-          "target_pools": {
+          "target_pool": {
             "description": "The URL of the pool to feature.  Specifying a valid pool URL will override the normal search behavior.",
             "type": "string"
           },
-          "excluded_pools": {
+          "excluded_pool": {
             "description": "URLs of pools the user wishes to ignore.  These pools will not be searched.",
             "type": "array",
             "items": {
@@ -297,21 +237,30 @@
           "url"
         ],
         "properties": {
-          "id": {
-            "type": "integer"
+          "url": {
+            "type": "string"
           },
           "name": {
             "type": "string"
           },
           "description": {
             "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "alive": {
-            "type": "boolean"
           }
+        }
+      },
+      "Warnings": {
+        "description": "Warnings returned by this service.",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "string"
+        }
+      },
+      "PoolResults": {
+        "description": "A list of search results sorted from most to least relevant.",
+        "type": "array",
+        "items": {
+          "$ref": "pool-search-api-OAS3.json#/PoolResult"
         }
       }
     }
