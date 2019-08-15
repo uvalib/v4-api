@@ -264,7 +264,7 @@
         "description": "A list of search results sorted from most to least relevant.",
         "type": "array",
         "items": {
-          "$ref": "pool-search-api-OAS3.json#/PoolResult"
+          "$ref": "https://raw.githubusercontent.com/uvalib/v4-api/master/pool-search-api-OAS3.json#/components/schemas/PoolResult"
         }
       }
     }

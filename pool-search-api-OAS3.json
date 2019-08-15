@@ -32,7 +32,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "v4-search-api-OAS3.json#/SearchRequest"
+                "$ref": "https://raw.githubusercontent.com/uvalib/v4-api/master/v4-search-api-OAS3.json#/components/schemas/SearchRequest"
               }
             }
           }
