@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "0.5",
+    "version": "0.6",
     "title": "Virgo Pool Search API",
     "description": ""
   },
@@ -32,7 +32,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchRequest"
+                "$ref": "https://raw.githubusercontent.com/uvalib/v4-api/master/v4-search-api-OAS3.json#/components/schemas/SearchRequest"
               }
             }
           }
@@ -42,7 +42,7 @@
             "description": "A successful response",
             "headers": {
               "Content-Language": {
-                "description": "The language in which the pool is returning pool/facet/field labels.",
+                "description": "The language in which the service is returning pool/facet/field labels.",
                 "schema": {
                   "type": "string"
                 },
@@ -88,65 +88,6 @@
       }
     },
     "schemas": {
-      "SearchRequest": {
-        "description": "All the information that defines a search.",
-        "type": "object",
-        "properties": {
-          "query": {
-            "type": "string",
-            "description": "\"A query formatted as defined by the specification here: https://github.com/uvalib/v4-api/tree/master/query-syntax\"\n"
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/PaginationRequest"
-          },
-          "facet": {
-            "type": "string",
-            "description": "The facet being requested by the client.  This can either be a specific facet, or the special facet of \"all\" that requests all available facets."
-          },
-          "filters": {
-            "$ref": "#/components/schemas/FiltersRequest"
-          }
-        }
-      },
-      "PaginationRequest": {
-        "description": "Information about the subset of the full results set is being requested.",
-        "properties": {
-          "start": {
-            "description": "The index of the first item to fetch.",
-            "type": "integer"
-          },
-          "rows": {
-            "description": "The number of items to request",
-            "type": "integer"
-          }
-        }
-      },
-      "FilterRequest": {
-        "description": "The information needed to request a single filter",
-        "type": "object",
-        "required": [
-          "name",
-          "value"
-        ],
-        "properties": {
-          "name": {
-            "description": "The name of this filter (facet)",
-            "type": "string"
-          },
-          "value": {
-            "description": "The value to use for filtering",
-            "type": "string"
-          }
-        }
-      },
-      "FiltersRequest": {
-        "description": "The list of filters being requested by the client",
-        "type": "array",
-        "uniqueItems": true,
-        "items": {
-          "$ref": "#/components/schemas/FilterRequest"
-        }
-      },
       "PoolResult": {
         "description": "Results returned from a search of a single pool.",
         "type": "object",
