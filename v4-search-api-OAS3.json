@@ -6,7 +6,7 @@
     "description": ""
   },
   "paths": {
-    "/pools": {
+    "/api/pools": {
       "get": {
         "summary": "Gets information about all pools in the authoritative pool list.",
         "operationId": "listPools",
@@ -44,7 +44,7 @@
         }
       }
     },
-    "/search": {
+    "/api/search": {
       "post": {
         "summary": "Performs an inter-pool search.",
         "operationId": "search",

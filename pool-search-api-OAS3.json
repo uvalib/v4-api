@@ -6,7 +6,7 @@
     "description": ""
   },
   "paths": {
-    "/search": {
+    "/api/search": {
       "post": {
         "summary": "Performs a pool search.",
         "operationId": "search",
