@@ -20,7 +20,7 @@
           {
             "in": "header",
             "name": "Accept-Language",
-            "description": "The language in which the client is requesting to receive localized pool/facet/field labels.",
+            "description": "The language in which the client is requesting to receive localized facet/field labels.",
             "schema": {
               "type": "string"
             },
@@ -42,7 +42,7 @@
             "description": "A successful response",
             "headers": {
               "Content-Language": {
-                "description": "The language in which the service is returning pool/facet/field labels.",
+                "description": "The language in which the service is returning facet/field labels.",
                 "schema": {
                   "type": "string"
                 },
@@ -69,6 +69,45 @@
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/identify": {
+      "get": {
+        "summary": "Retrieves pool identity information.",
+        "operationId": "identify",
+        "description": "Identifies this pool.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "description": "The language in which the client is requesting to receive localized pool labels.",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response",
+            "headers": {
+              "Content-Language": {
+                "description": "The language in which the service is returning pool labels.",
+                "schema": {
+                  "type": "string"
+                },
+                "required": false
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoolIdentification"
+                }
+              }
+            }
           }
         }
       }
@@ -248,6 +287,24 @@
         "uniqueItems": true,
         "items": {
           "$ref": "#/components/schemas/FacetListItem"
+        }
+      },
+      "PoolIdentification": {
+        "description": "The localized information about this pool",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The localized name of this pool, as displayed above the search results",
+            "type": "string"
+          },
+          "description": {
+            "description": "The localized description of this pool, as displayed in search pool (source) setup",
+            "type": "string"
+          },
+          "public_url": {
+            "description": "The publicly-accessible URL for this pool",
+            "type": "string"
+          }
         }
       }
     }
