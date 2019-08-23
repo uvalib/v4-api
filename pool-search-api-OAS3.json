@@ -200,6 +200,13 @@
               "basic",
               "detailed"
             ]
+          },
+          "display": {
+            "type": "string",
+            "description": "Specifies whether this field should be displayed in the client.",
+            "enum": [
+              "optional"
+            ]
           }
         }
       },
