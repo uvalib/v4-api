@@ -181,16 +181,17 @@
           },
           "type": {
             "type": "string",
-            "description": "The type of this field.",
+            "description": "The type of this field.  The default is 'text' if not specified.",
             "enum": [
-              "FIXME",
               "text",
-              "url"
+              "identifier",
+              "url",
+              "etc."
             ]
           },
           "label": {
             "type": "string",
-            "description": "The label to display for this field."
+            "description": "The localized label to display for this field."
           },
           "value": {
             "type": "string",
@@ -198,7 +199,7 @@
           },
           "visibility": {
             "type": "string",
-            "description": "Specifies the view in which this field should be displayed in the client.",
+            "description": "Specifies the view in which this field should be displayed in the client.  The default is 'basic' if not specified.",
             "enum": [
               "basic",
               "detailed"
@@ -206,7 +207,7 @@
           },
           "display": {
             "type": "string",
-            "description": "Specifies whether this field should be displayed in the client.",
+            "description": "Specifies whether this field should be displayed in the client.  If not specified, the client will display this field.",
             "enum": [
               "optional"
             ]
