@@ -128,7 +128,7 @@
     },
     "schemas": {
       "PoolResult": {
-        "description": "Results returned from a search of a single pool.",
+        "description": "Results returned from a search of a single pool.  NOTE: group_list is not currently used, but will replace record_list when grouped records are working.",
         "type": "object",
         "required": [
           "service_url",
@@ -146,6 +146,9 @@
           },
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
+          },
+          "record_list": {
+            "$ref": "#/components/schemas/RecordList"
           },
           "group_list": {
             "$ref": "#/components/schemas/GroupList"
