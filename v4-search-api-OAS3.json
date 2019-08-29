@@ -189,22 +189,22 @@
         "description": "The information needed to request a single filter.",
         "type": "object",
         "required": [
-          "name",
-          "value"
+          "facet_id",
+          "value_id"
         ],
         "properties": {
-          "name": {
+          "facet_id": {
             "type": "string",
-            "description": "The name of the facet the client wants to filter on."
+            "description": "The identifier of the facet to filter on."
           },
-          "value": {
+          "value_id": {
             "type": "string",
-            "description": "The value of the facet to use for filtering."
+            "description": "The identifier of the facet value to use for filtering."
           }
         }
       },
       "Filters": {
-        "description": "A list of filters to apply to a search.  These will be facet names and values that the client has received in a previous search.",
+        "description": "A list of filters to apply to a search.  These will be facet and value identifiers that the client has received in a previous search.",
         "type": "array",
         "uniqueItems": true,
         "items": {

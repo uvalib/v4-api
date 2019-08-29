@@ -277,18 +277,36 @@
           }
         }
       },
+      "AvailableFacet": {
+        "description": "A single facet result",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The identifier for this facet",
+            "type": "string"
+          },
+          "name": {
+            "description": "The localized display name of this facet",
+            "type": "string"
+          }
+        }
+      },
       "AvailableFacets": {
         "description": "The list of facets that the pool supports and which can be requested by the client as a facet or filter",
         "type": "array",
         "uniqueItems": true,
         "items": {
-          "type": "string"
+          "$ref": "#/components/schemas/AvailableFacet"
         }
       },
       "FacetBucket": {
         "description": "A single bucket in a facet result",
         "type": "object",
         "properties": {
+          "id": {
+            "description": "The identifier for this bucket",
+            "type": "string"
+          },
           "value": {
             "description": "The value of this bucket",
             "type": "string"
@@ -303,8 +321,12 @@
         "description": "A single facet result",
         "type": "object",
         "properties": {
+          "id": {
+            "description": "The identifier for this facet",
+            "type": "string"
+          },
           "name": {
-            "description": "The name of this facet",
+            "description": "The localized display name of this facet",
             "type": "string"
           },
           "buckets": {
