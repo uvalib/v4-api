@@ -190,16 +190,16 @@
         "type": "object",
         "required": [
           "facet_id",
-          "value_id"
+          "value"
         ],
         "properties": {
           "facet_id": {
             "type": "string",
             "description": "The identifier of the facet to filter on."
           },
-          "value_id": {
+          "value": {
             "type": "string",
-            "description": "The identifier of the facet value to use for filtering."
+            "description": "The facet value to use for filtering."
           }
         }
       },

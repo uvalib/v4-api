@@ -304,10 +304,6 @@
         "description": "A single bucket in a facet result",
         "type": "object",
         "properties": {
-          "id": {
-            "description": "The identifier for this bucket",
-            "type": "string"
-          },
           "value": {
             "description": "The value of this bucket",
             "type": "string"
