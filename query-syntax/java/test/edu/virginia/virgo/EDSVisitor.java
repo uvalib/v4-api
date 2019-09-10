@@ -165,7 +165,7 @@ public class EDSVisitor {
         else if (fieldType.equals("author")) result = "AU ";
         else if (fieldType.equals("subject")) result = "SU ";
         else if (fieldType.equals("identifier")) result = "IB ";
-        else if (fieldType.equals("keyword")) result = "";
+        else if (fieldType.equals("keyword")) result = "TX ";
         return new Value(result); 
     }
     
@@ -257,6 +257,6 @@ public class EDSVisitor {
             return new Value(" "+ node.getText() + " ");
         else if (node.getSymbol().getType() == VirgoQueryLexer.DATE_STRING)
             return new Value(node.getText().replaceAll("[-/]", ""));
-        return new Value(node.getText().toLowerCase());
+        return new Value(node.getText().toLowerCase().replaceAll("[-()]", ""));
     }
 }
