@@ -1,14 +1,29 @@
 package edu.virginia.virgo;
 import java.nio.CharBuffer;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CodePointBuffer;
 import org.antlr.v4.runtime.CodePointCharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class Main {
+    
+    static class MyErrorListener extends BaseErrorListener {
+        @Override
+        public void syntaxError( Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+                                 String msg, RecognitionException e ) {
+          // method arguments should be used for more detailed report
+          throw new RuntimeException("Syntax error occurred at Symbol " + ((Token)offendingSymbol).getText() + " message is :" + msg);
+        }
+      };
+    
     public static void main(String[] args) throws Exception {
 
         String test_strs[]  = {
@@ -20,7 +35,9 @@ public class Main {
                            "author:{ ʼJam-dbyangs-nyi-ma }",
                            "title:{Tragicheskai͡a istorii͡a kavkazskikh }",
                            "author:{Немирович-Данченко, Василий Иванович}",
+                           "title : {\"susan sontag\" OR (music title)}   AND keyword:{ Maunsell }" ,
                            "( title : {\"susan sontag\" OR (music title)}   AND keyword:{ Maunsell } ) OR author:{ liberty }" ,
+                           "title : {\"susan sontag\" OR (music title)}   AND ( keyword:{ Maunsell } OR author:{ liberty } )" ,
                            " author: {lovecraft} AND title: {madness NOT dunwich}",
                            "identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR \"KJE5602.C73 2012\"}",
                            "title:{A = B}",
@@ -59,8 +76,13 @@ public class Main {
             }
             if (parseEDS)
             {
-                String result = parseForEDS(test);
-                System.out.println(result);
+                HashMap<String, String> result = parseForEDSasHash(test);
+                String indent = "";
+                for (String key : result.keySet())
+                {
+                    System.out.println(indent + key + "=" + result.get(key));
+                    indent = "  ";
+                }
             }
         }
     }
@@ -95,6 +117,19 @@ public class Main {
         EDSVisitor visitor = new EDSVisitor();
         Value traverseResult = visitor.visit(tree);
         return traverseResult.asString();
+    }
+
+    public static HashMap<String,String> parseForEDSasHash(String input)
+    {
+        String traverseResult = parseForEDS(input);
+        String[] parts = traverseResult.split("&&&");
+        HashMap<String, String> result = new LinkedHashMap<String, String>();
+        for (String part : parts)
+        {
+            String[] pieces = part.split("[ ]*=[ ]*", 2);
+            result.put(pieces[0], pieces[1]);
+        }
+        return result;
     }
 
     public static void showTokens(String input)

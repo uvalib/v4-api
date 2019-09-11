@@ -7,8 +7,11 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class EDSVisitor {
 
+    int queryPartCount;
+
     public Value visit(ParseTree tree) 
     {
+        int queryPartCount = 1;
         if (tree instanceof RuleNode) 
         {
             return visitRuleNode((RuleNode)tree);
@@ -85,22 +88,36 @@ public class EDSVisitor {
             Value query1 = this.visit(ctx.getChild(0));
             Value queryop = this.visit(ctx.getChild(1));
             Value query2 = this.visit(ctx.getChild(2));
-            sb.append(" (").append(query1.asString()).append(queryop.asString()).append(query2).append(") ");
+            Value query2Fixed = insertBoolean(query2.asString(), queryop.asString());
+            
+            sb.append(query1.asString()).append("&&&").append(query2Fixed.asString()).append(" ");
             return(new Value(sb.toString()));
         }
         // query_parts : LPAREN query_parts RPAREN
         else if (ctx.getChildCount() == 3 && ctx.getChild(0) instanceof TerminalNode)
         {
             Value query1 = this.visit(ctx.getChild(1));
-            sb.append(" (").append(query1.asString()).append(") ");
-            return(new Value(sb.toString()));
+ //           sb.append(getQueryLabel()).append(query1.asString()).append(" ");
+            return(query1);
         }
         // query_parts : field_query
         else 
         {
             Value query1 = this.visit(ctx.getChild(0));
-            return(query1);
+            sb.append(getQueryLabel()).append(query1.asString()).append(" ");
+            return(new Value(sb.toString()));
         }
+    }
+
+    private Value insertBoolean(String query2, String operator)
+    {
+        String result = query2.replaceFirst("=", "="+ operator);
+        return new Value(result);
+    }
+
+    private String getQueryLabel()
+    {
+        return ("query-"+queryPartCount++ +"=");
     }
 
     public Value visitField_query(RuleNode ctx) 
@@ -131,15 +148,15 @@ public class EDSVisitor {
         if (query.isArray())
         {
             Value[] parts = query.asArray();
-            sb.append("(");
+         //   sb.append("(");
             expand(sb, fieldType, parts[0]);
             sb.append(parts[1].asString());
-            expand(sb, fieldType, parts[2]);
-            sb.append(")");
+            expand(sb, "", parts[2]);
+        //    sb.append(")");
         }
         else
         {
-            sb.append("(").append(fieldType).append(query.toString()).append(")");
+            sb./*append("(").*/append(fieldType).append(query.toString())/*.append(")")*/;
         }
     }
 
@@ -150,7 +167,7 @@ public class EDSVisitor {
         String fieldname = "";
         if (fieldType.equals("date"))
         {
-            fieldname = "DT "; 
+            fieldname = "DT: "; 
         }
         return new Value(fieldname); 
     }
@@ -161,11 +178,11 @@ public class EDSVisitor {
         // field_type : TITLE | AUTHOR | SUBJECT | KEYWORD |  IDENTIFIER
         String fieldType = ctx.getChild(0).toString();
         String result = "";
-        if (fieldType.equals("title")) result = "TI ";
-        else if (fieldType.equals("author")) result = "AU ";
-        else if (fieldType.equals("subject")) result = "SU ";
-        else if (fieldType.equals("identifier")) result = "IB ";
-        else if (fieldType.equals("keyword")) result = "TX ";
+        if (fieldType.equals("title")) result = "TI: ";
+        else if (fieldType.equals("author")) result = "AU: ";
+        else if (fieldType.equals("subject")) result = "SU: ";
+        else if (fieldType.equals("identifier")) result = "IB: ";
+        else if (fieldType.equals("keyword")) result = "TX: ";
         return new Value(result); 
     }
     
