@@ -20,7 +20,7 @@ public class Main {
         public void syntaxError( Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
                                  String msg, RecognitionException e ) {
           // method arguments should be used for more detailed report
-          throw new RuntimeException("Syntax error occurred at Symbol " + ((Token)offendingSymbol).getText() + " message is :" + msg);
+          throw new RuntimeException("Syntax error occurred at Symbol " + ((Token)offendingSymbol).getText() + "-- message is :" + msg);
         }
       };
     
@@ -45,7 +45,10 @@ public class Main {
                            "date:{1945/12/07 TO 1949}",   // _query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"
                            "date:{BEFORE 1945-12-06}",    // _query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"
                            "date:{AFTER 1945}",           // _query_:"{!lucene df=published_daterange}([1945 TO *])"
-                           "date:{<1945} AND date:{>1932} AND author:{Shelly}", //  ( (_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])")  AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)") 
+                           "date:{<1945} AND date:{>1932} AND author:{Shelly}", //  ( (_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])")  AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")
+                           "garbage:{1954}",
+                           "rubbish:{bananas}",
+                           "title:{bannanas}",
                            };
 
 //        Reader reader = new BufferedReader(new FileReader(args[0]));
@@ -76,12 +79,19 @@ public class Main {
             }
             if (parseEDS)
             {
-                HashMap<String, String> result = parseForEDSasHash(test);
-                String indent = "";
-                for (String key : result.keySet())
+                try { 
+                    HashMap<String, String> result = parseForEDSasHash(test);
+                    String indent = "";
+                    for (String key : result.keySet())
+                    {
+                        System.out.println(indent + key + "=" + result.get(key));
+                        indent = "  ";
+                    }
+                }
+                catch (RuntimeException re)
                 {
-                    System.out.println(indent + key + "=" + result.get(key));
-                    indent = "  ";
+                    System.out.println("Error on query: "+ test);
+                    System.out.println(re.toString());
                 }
             }
         }
@@ -89,13 +99,19 @@ public class Main {
 
     public static String parseForSolr(String input)
     {
+        MyErrorListener errorListener = new MyErrorListener();
+
         CharBuffer cb = CharBuffer.wrap(input.toCharArray());
         CodePointBuffer cpb = CodePointBuffer.withChars(cb);
         CharStream cs = CodePointCharStream.fromBuffer(cpb);
 
         VirgoQueryLexer lexer = new VirgoQueryLexer(cs);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener( errorListener );
 
         VirgoQuery parser = new VirgoQuery(new CommonTokenStream(lexer));
+        parser.removeErrorListeners();
+        parser.addErrorListener( errorListener );
 
         ParseTree tree = parser.query();
         SimpleVisitor visitor = new SimpleVisitor();
@@ -105,13 +121,19 @@ public class Main {
 
     public static String parseForEDS(String input)
     {
+        MyErrorListener errorListener = new MyErrorListener();
+
         CharBuffer cb = CharBuffer.wrap(input.toCharArray());
         CodePointBuffer cpb = CodePointBuffer.withChars(cb);
         CharStream cs = CodePointCharStream.fromBuffer(cpb);
 
         VirgoQueryLexer lexer = new VirgoQueryLexer(cs);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener( errorListener );
 
         VirgoQuery parser = new VirgoQuery(new CommonTokenStream(lexer));
+        parser.removeErrorListeners();
+        parser.addErrorListener( errorListener );
 
         ParseTree tree = parser.query();
         EDSVisitor visitor = new EDSVisitor();

@@ -90,7 +90,7 @@ public class EDSVisitor {
             Value query2 = this.visit(ctx.getChild(2));
             Value query2Fixed = insertBoolean(query2.asString(), queryop.asString());
             
-            sb.append(query1.asString()).append("&&&").append(query2Fixed.asString()).append(" ");
+            sb.append(query1.asString()).append("&&&").append(query2Fixed.asString());
             return(new Value(sb.toString()));
         }
         // query_parts : LPAREN query_parts RPAREN
@@ -104,14 +104,14 @@ public class EDSVisitor {
         else 
         {
             Value query1 = this.visit(ctx.getChild(0));
-            sb.append(getQueryLabel()).append(query1.asString()).append(" ");
+            sb.append(getQueryLabel()).append(query1.asString());
             return(new Value(sb.toString()));
         }
     }
 
     private Value insertBoolean(String query2, String operator)
     {
-        String result = query2.replaceFirst("=", "="+ operator);
+        String result = query2.replaceFirst("=", "="+ operator.trim() +",");
         return new Value(result);
     }
 
@@ -167,7 +167,7 @@ public class EDSVisitor {
         String fieldname = "";
         if (fieldType.equals("date"))
         {
-            fieldname = "DT: "; 
+            fieldname = "DT:"; 
         }
         return new Value(fieldname); 
     }
@@ -178,11 +178,11 @@ public class EDSVisitor {
         // field_type : TITLE | AUTHOR | SUBJECT | KEYWORD |  IDENTIFIER
         String fieldType = ctx.getChild(0).toString();
         String result = "";
-        if (fieldType.equals("title")) result = "TI: ";
-        else if (fieldType.equals("author")) result = "AU: ";
-        else if (fieldType.equals("subject")) result = "SU: ";
-        else if (fieldType.equals("identifier")) result = "IB: ";
-        else if (fieldType.equals("keyword")) result = "TX: ";
+        if (fieldType.equals("title")) result = "TI:";
+        else if (fieldType.equals("author")) result = "AU:";
+        else if (fieldType.equals("subject")) result = "SU:";
+        else if (fieldType.equals("identifier")) result = "IB:";
+        else if (fieldType.equals("keyword")) result = "TX:";
         return new Value(result); 
     }
     
@@ -274,6 +274,6 @@ public class EDSVisitor {
             return new Value(" "+ node.getText() + " ");
         else if (node.getSymbol().getType() == VirgoQueryLexer.DATE_STRING)
             return new Value(node.getText().replaceAll("[-/]", ""));
-        return new Value(node.getText().toLowerCase().replaceAll("[-()]", ""));
+        return new Value(node.getText().toLowerCase().replaceAll("[-()]", "").trim());
     }
 }
