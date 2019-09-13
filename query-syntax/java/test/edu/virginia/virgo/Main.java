@@ -20,7 +20,12 @@ public class Main {
         public void syntaxError( Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
                                  String msg, RecognitionException e ) {
           // method arguments should be used for more detailed report
-          throw new RuntimeException("Syntax error occurred at Symbol " + ((Token)offendingSymbol).getText() + "-- message is :" + msg);
+          if (offendingSymbol != null && offendingSymbol instanceof Token)
+              throw new RuntimeException("Parser error occurred at Symbol " + ((Token)offendingSymbol).getText() + " -- message is :" + msg);
+          else if (msg != null)
+              throw new RuntimeException("Lexer error occurred -- message is :" + msg);
+          else
+              throw new RuntimeException("Syntax error occurred -- deal with it.");
         }
       };
     
@@ -42,6 +47,7 @@ public class Main {
                            "identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR \"KJE5602.C73 2012\"}",
                            "title:{A = B}",
                            "date:{1945}",                 // _query_:"{!lucene df=published_daterange}(1945)"
+                           "date:{BadDate}",                 // _query_:"{!lucene df=published_daterange}(1945)"
                            "date:{1945/12/07 TO 1949}",   // _query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"
                            "date:{BEFORE 1945-12-06}",    // _query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"
                            "date:{AFTER 1945}",           // _query_:"{!lucene df=published_daterange}([1945 TO *])"
@@ -49,6 +55,7 @@ public class Main {
                            "garbage:{1954}",
                            "rubbish:{bananas}",
                            "title:{bannanas}",
+                           "date:{1932 TO 1945} HELLOOOOO author:{Shelly}"
                            };
 
 //        Reader reader = new BufferedReader(new FileReader(args[0]));
