@@ -128,7 +128,7 @@
     },
     "schemas": {
       "PoolResult": {
-        "description": "Results returned from a search of a single pool.  NOTE: group_list is not currently used, but will replace record_list when grouped records are working.",
+        "description": "Results returned from a search of a single pool.",
         "type": "object",
         "required": [
           "identity",
@@ -141,9 +141,6 @@
           },
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
-          },
-          "record_list": {
-            "$ref": "#/components/schemas/RecordList"
           },
           "group_list": {
             "$ref": "#/components/schemas/GroupList"
@@ -252,7 +249,7 @@
         }
       },
       "GroupList": {
-        "description": "A list of Groups.",
+        "description": "A list of Groups.  For pools that do not support grouping, each record should be wrapped inside a group with a count of 1.",
         "type": "array",
         "uniqueItems": true,
         "items": {
