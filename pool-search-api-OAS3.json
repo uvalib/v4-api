@@ -245,6 +245,10 @@
           },
           "record_list": {
             "$ref": "#/components/schemas/RecordList"
+          },
+          "exact": {
+            "type": "boolean",
+            "description": "Denotes whether this item is an exact match, for results with a confidence value of \"exact\""
           }
         }
       },
