@@ -167,8 +167,8 @@
           }
         }
       },
-      "RecordField": {
-        "description": "A single Field in a Record",
+      "GenericField": {
+        "description": "A single Field in a Record or Group",
         "type": "object",
         "properties": {
           "name": {
@@ -218,7 +218,7 @@
             "type": "array",
             "uniqueItems": true,
             "items": {
-              "$ref": "#/components/schemas/RecordField"
+              "$ref": "#/components/schemas/GenericField"
             }
           }
         }
@@ -242,6 +242,13 @@
           "count": {
             "type": "integer",
             "description": "The number of Records in this group."
+          },
+          "fields": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/components/schemas/GenericField"
+            }
           },
           "record_list": {
             "$ref": "#/components/schemas/RecordList"
