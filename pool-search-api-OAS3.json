@@ -58,14 +58,66 @@
             }
           },
           "400": {
-            "description": "A failed response resulting from a bad request.",
+            "description": "A failed response resulting from a bad request."
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/resource/{id}": {
+      "get": {
+        "summary": "Performs a single item lookup.",
+        "operationId": "resource",
+        "description": "Looks up this item.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "description": "The language in which the client is requesting to receive localized field labels.",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Identifier for the resource"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response",
+            "headers": {
+              "Content-Language": {
+                "description": "The language in which the service is returning facet/field labels.",
+                "schema": {
+                  "type": "string"
+                },
+                "required": false
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PoolResult"
+                  "$ref": "#/components/schemas/Record"
                 }
               }
             }
+          },
+          "400": {
+            "description": "A failed response resulting from a bad request."
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedError"
