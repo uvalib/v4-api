@@ -1,0 +1,145 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ILS Connector V4",
+    "description": "This is the ILS connector for Virgo 4. It currently supplies availability information to be displayed on Virgo4's details page.",
+    "version": "4.0.0"
+  },
+  "servers": [
+    {
+      "url": "ils-connector-dev.lib.virginia.edu/v4",
+      "description": "Dev Server"
+    }
+  ],
+  "externalDocs": {
+    "description": "Virgo4 API Docs Home",
+    "url": "http://virgo4-api.internal.lib.virginia.edu/"
+  },
+  "tags": [
+    {
+      "name": "Items",
+      "description": "Retrieves item information from Sirsi.",
+      "externalDocs": {
+        "description": "",
+        "url": "http://example.com"
+      }
+    }
+  ],
+  "paths": {
+    "/availability/{item_id}": {
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Get availability information for an item ID",
+        "description": "Returns the holding info for a single catalog item.",
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "description": "The catalog key",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Availability"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Item not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "TBD"
+      }
+    },
+    "schemas": {
+      "Availability": {
+        "description": "A data driven list of fields to generate the availability table.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The catalog key"
+          },
+          "holdings": {
+            "$ref": "#/components/schemas/HoldingList"
+          }
+        }
+      },
+      "HoldingList": {
+        "description": "A list of holdings for a single catalog item",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Holding"
+        }
+      },
+      "Holding": {
+        "description": "A single holding",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "fields": {
+            "$ref": "#/components/schemas/FieldList"
+          }
+        }
+      },
+      "FieldList": {
+        "description": "A list of fields for a single item",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Field"
+        }
+      },
+      "Field": {
+        "description": "A single field",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "visible": {
+            "type": "boolean",
+            "description": "Is this field visible?",
+            "default": true
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of this field.",
+            "default": "text",
+            "enum": [
+              "text",
+              "url",
+              "etc."
+            ]
+          }
+        }
+      }
+    }
+  }
+}
