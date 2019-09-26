@@ -26,16 +26,16 @@
     }
   ],
   "paths": {
-    "/availability/{item_id}": {
+    "/availability/{title_id}": {
       "get": {
         "tags": [
           "Items"
         ],
-        "summary": "Get availability information for an item ID",
+        "summary": "Get availability information for an title ID",
         "description": "Returns the holding info for a single catalog item.",
         "parameters": [
           {
-            "name": "item_id",
+            "name": "title_id",
             "in": "path",
             "required": true,
             "description": "The catalog key",
@@ -78,9 +78,21 @@
         "description": "A data driven list of fields to generate the availability table.",
         "type": "object",
         "properties": {
-          "id": {
+          "title_id": {
             "type": "string",
             "description": "The catalog key"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "A list of columns for displaying a table. This contains all of the possible field names.",
+            "example": [
+              "Library",
+              "Call Number",
+              "Availability"
+            ]
           },
           "holdings": {
             "$ref": "#/components/schemas/HoldingList"
