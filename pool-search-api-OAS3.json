@@ -233,7 +233,12 @@
             "enum": [
               "text",
               "identifier",
+              "author",
+              "title",
+              "subtitle",
+              "availability",
               "url",
+              "image-url",
               "etc."
             ]
           },
