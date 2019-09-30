@@ -410,10 +410,6 @@
             "description": "The localized name of this pool, as displayed above the search results.  This should be as short as possible, e.g. \"Catalog\".",
             "type": "string"
           },
-          "summary": {
-            "description": "The localized brief summary of this pool.  This should be no more than a few words, e.g. \"The UVA Library Catalog\".",
-            "type": "string"
-          },
           "description": {
             "description": "The localized detailed description of this pool.  This should indicate what content is available in the pool, and can include the current status of the pool.",
             "type": "string"
