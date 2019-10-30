@@ -274,6 +274,6 @@ public class EDSVisitor {
             return new Value(" "+ node.getText() + " ");
         else if (node.getSymbol().getType() == VirgoQueryLexer.DATE_STRING)
             return new Value(node.getText().replaceAll("[-/]", ""));
-        return new Value(node.getText().toLowerCase().replaceAll("[-()]", "").trim());
+        return new Value(node.getText().replaceAll("[()]", "").trim());
     }
 }
