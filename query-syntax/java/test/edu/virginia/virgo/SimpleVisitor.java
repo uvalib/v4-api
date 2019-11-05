@@ -166,10 +166,10 @@ public class SimpleVisitor {
         String pf = ""; 
         if (fieldType.equals("title") || fieldType.equals("subject") || fieldType.equals("author") || fieldType.equals("identifier"))
         {
-            qf = "!edismax qf=$"+ fieldType + "_qf";
+            qf = "qf=$"+ fieldType + "_qf";
             pf = " pf=$"+ fieldType + "_pf";
         }
-        return new Value(qf + pf); 
+        return new Value("!edismax "+ qf + pf); 
     }
     
     
