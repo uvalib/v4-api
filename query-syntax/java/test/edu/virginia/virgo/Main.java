@@ -81,8 +81,15 @@ public class Main {
             if (showTokens)  showTokens(test);
             if (parseSolr)
             {
-                String result = parseForSolr(test);
-                System.out.println(result);
+                try { 
+                    String result = parseForSolr(test);
+                    System.out.println(result);
+                }
+                catch (RuntimeException re)
+                {
+                    System.out.println("Error on query: "+ test);
+                    System.out.println(re.toString());
+                }
             }
             if (parseEDS)
             {
