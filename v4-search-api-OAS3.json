@@ -139,10 +139,6 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           },
-          "facet": {
-            "type": "string",
-            "description": "Requests a single facet, or all facets supported by a pool if the special value \"all\" is provided."
-          },
           "filters": {
             "$ref": "#/components/schemas/Filters"
           },
@@ -264,7 +260,7 @@
         "description": "A list of search results sorted from most to least relevant.",
         "type": "array",
         "items": {
-          "$ref": "https://raw.githubusercontent.com/uvalib/v4-api/master/pool-search-api-OAS3.json#/components/schemas/PoolResult"
+          "$ref": "https://raw.githubusercontent.com/uvalib/v4-api/master/pool-search-api-OAS3.json#/components/schemas/PoolResponse"
         }
       }
     }

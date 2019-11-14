@@ -52,7 +52,67 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PoolResult"
+                  "$ref": "#/components/schemas/PoolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A failed response resulting from a bad request."
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/search/facets": {
+      "post": {
+        "summary": "(path okay?) Returns the facet list for a given search.",
+        "operationId": "search/facets",
+        "description": "Accepts the same search values as a regular pool search but only returns available and selected facets with their buckets and counts.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "description": "The language in which the client is requesting to receive localized facet/field labels.",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "requestBody": {
+          "description": "Information defining the search to be performed.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "https://raw.githubusercontent.com/uvalib/v4-api/master/v4-search-api-OAS3.json#/components/schemas/SearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response",
+            "headers": {
+              "Content-Language": {
+                "description": "The language in which the service is returning facet/field labels.",
+                "schema": {
+                  "type": "string"
+                },
+                "required": false
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacetResponse"
                 }
               }
             }
@@ -179,7 +239,7 @@
       }
     },
     "schemas": {
-      "PoolResult": {
+      "PoolResponse": {
         "description": "Results returned from a search of a single pool.",
         "type": "object",
         "required": [
@@ -198,10 +258,7 @@
             "$ref": "#/components/schemas/GroupList"
           },
           "available_facets": {
-            "$ref": "#/components/schemas/AvailableFacets"
-          },
-          "facet_list": {
-            "$ref": "#/components/schemas/FacetList"
+            "$ref": "#/components/schemas/AvailableFacetList"
           },
           "confidence": {
             "type": "string",
@@ -342,8 +399,16 @@
           }
         }
       },
+      "AvailableFacetList": {
+        "description": "(This might be unnecessary with a separate facets endpoint.) The list of facet names that the pool supports and which can be requested by the client as a facet or filter. Does not include buckets or counts.",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/AvailableFacet"
+        }
+      },
       "AvailableFacet": {
-        "description": "A single facet result",
+        "description": "A single available facet result",
         "type": "object",
         "properties": {
           "id": {
@@ -356,26 +421,22 @@
           }
         }
       },
-      "AvailableFacets": {
-        "description": "The list of facets that the pool supports and which can be requested by the client as a facet or filter",
+      "FacetResponse": {
+        "description": "The detailed list of facets that have been applied to this request. Includes buckes and counts.",
+        "type": "object",
+        "uniqueItems": true,
+        "properties": {
+          "facet_list": {
+            "$ref": "#/components/schemas/FacetList"
+          }
+        }
+      },
+      "FacetList": {
+        "description": "The list of facet results for facets requested by the client",
         "type": "array",
         "uniqueItems": true,
         "items": {
-          "$ref": "#/components/schemas/AvailableFacet"
-        }
-      },
-      "FacetBucket": {
-        "description": "A single bucket in a facet result",
-        "type": "object",
-        "properties": {
-          "value": {
-            "description": "The value of this bucket",
-            "type": "string"
-          },
-          "count": {
-            "description": "The number of results in this bucket",
-            "type": "integer"
-          }
+          "$ref": "#/components/schemas/FacetListItem"
         }
       },
       "FacetListItem": {
@@ -399,12 +460,23 @@
           }
         }
       },
-      "FacetList": {
-        "description": "The list of facet results for facets requested by the client",
-        "type": "array",
-        "uniqueItems": true,
-        "items": {
-          "$ref": "#/components/schemas/FacetListItem"
+      "FacetBucket": {
+        "description": "A single bucket in a facet result",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "The value of this bucket",
+            "type": "string"
+          },
+          "count": {
+            "description": "The number of results in this bucket",
+            "type": "integer"
+          },
+          "selected": {
+            "description": "Has this facet value been applied to the search?",
+            "type": "boolean",
+            "default": false
+          }
         }
       },
       "PoolIdentification": {
