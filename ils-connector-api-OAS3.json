@@ -15,30 +15,31 @@
     "description": "Virgo4 API Docs Home",
     "url": "http://virgo4-api.internal.lib.virginia.edu/"
   },
-  "tags": [
-    {
-      "name": "Items",
-      "description": "Retrieves item information from Sirsi.",
-      "externalDocs": {
-        "description": "",
-        "url": "http://example.com"
-      }
-    }
-  ],
   "paths": {
-    "/availability/{title_id}": {
+    "/v4/availability/{title_id}": {
       "get": {
-        "tags": [
-          "Items"
+        "summary": "Retrieves availability info for a doc_id.",
+        "operationId": "availability",
+        "description": "Retrieves Availability.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
         ],
-        "summary": "Get availability information for an title ID",
-        "description": "Returns the holding info for a single catalog item.",
         "parameters": [
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "description": "The language in which the client is requesting to receive localized facet/field labels.",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
           {
             "name": "title_id",
             "in": "path",
             "required": true,
-            "description": "The catalog key",
             "schema": {
               "type": "string"
             }
@@ -46,20 +47,76 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "A successful response",
+            "headers": {
+              "Content-Language": {
+                "description": "The language in which the service is returning facet/field labels.",
+                "schema": {
+                  "type": "string"
+                },
+                "required": false
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Availability"
+                  "$ref": "#/components/schemas/AvailabilityResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid ID supplied"
+            "description": "A failed response resulting from a bad request."
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
-            "description": "Item not found"
+            "description": "The title id could not be found"
+          }
+        }
+      }
+    },
+    "/v4/availability/list": {
+      "get": {
+        "summary": "Lists Locations and Libraries",
+        "operationId": "lists",
+        "description": "Retrieves the list of Locations and Libraries with their official keys, names, descriptions and \"on shelf\" values.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "description": "The language in which the client is requesting to receive localized labels",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response",
+            "headers": {
+              "Content-Language": {
+                "description": "The language",
+                "schema": {
+                  "type": "string"
+                },
+                "required": false
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvailabilityLists"
+                }
+              }
+            }
           }
         }
       }
@@ -73,60 +130,79 @@
         "bearerFormat": "TBD"
       }
     },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid"
+      }
+    },
     "schemas": {
-      "Availability": {
-        "description": "A data driven list of fields to generate the availability table.",
+      "AvailabilityResponse": {
+        "description": "Results returned from an availability request.",
         "type": "object",
+        "required": [
+          "title_id",
+          "columns",
+          "items"
+        ],
         "properties": {
           "title_id": {
             "type": "string",
-            "description": "The catalog key"
+            "description": "The ID of the requested title."
           },
           "columns": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "description": "A list of columns for displaying a table. There will be one column for each entry in \"Fields\""
             },
-            "description": "A list of columns for displaying a table. This contains all of the possible field names.",
             "example": [
               "Library",
+              "Current Location",
               "Call Number",
               "Availability"
             ]
           },
-          "holdings": {
-            "$ref": "#/components/schemas/HoldingList"
+          "items": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
           }
         }
       },
-      "HoldingList": {
-        "description": "A list of holdings for a single catalog item",
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Holding"
-        }
-      },
-      "Holding": {
-        "description": "A single holding",
-        "type": "object",
+      "Item": {
+        "description": "A single availability item.",
         "properties": {
-          "id": {
+          "call_number": {
             "type": "string"
           },
+          "barcode": {
+            "type": "string"
+          },
+          "on_shelf": {
+            "description": "Is this item on shelf?",
+            "type": "boolean"
+          },
+          "unavailable": {
+            "description": "Is this item unrequestable?",
+            "type": "boolean"
+          },
+          "notice": {
+            "type": "string",
+            "description": "A special notice for this item. (Medium rare, Course Reserve, etc.)"
+          },
           "fields": {
-            "$ref": "#/components/schemas/FieldList"
+            "description": "A list of field values for this item",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Field"
+            }
           }
-        }
-      },
-      "FieldList": {
-        "description": "A list of fields for a single item",
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Field"
         }
       },
       "Field": {
-        "description": "A single field",
+        "description": "The representation for a single field. Modeled after the field schema in record details.",
         "type": "object",
         "properties": {
           "name": {
@@ -136,19 +212,49 @@
             "type": "string"
           },
           "visible": {
-            "type": "boolean",
-            "description": "Is this field visible?",
-            "default": true
+            "type": "boolean"
           },
           "type": {
             "type": "string",
-            "description": "The type of this field.",
-            "default": "text",
             "enum": [
-              "text",
-              "url",
-              "etc."
+              "text"
             ]
+          }
+        }
+      },
+      "AvailabilityLists": {
+        "type": "object",
+        "properties": {
+          "libraries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LibraryLocation"
+            }
+          },
+          "locations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LibraryLocation"
+            }
+          }
+        }
+      },
+      "LibraryLocation": {
+        "description": "The representation of a library or location",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "on_shelf": {
+            "description": "Is this considered \"On Shelf\"?",
+            "type": "boolean"
           }
         }
       }
