@@ -16,7 +16,7 @@
     "url": "http://virgo4-api.internal.lib.virginia.edu/"
   },
   "paths": {
-    "/v4/availability/{title_id}": {
+    "/api/availability/{title_id}": {
       "get": {
         "summary": "Retrieves availability info for a doc_id.",
         "operationId": "availability",
@@ -77,7 +77,7 @@
         }
       }
     },
-    "/v4/availability/list": {
+    "/api/availability/list": {
       "get": {
         "summary": "Lists Locations and Libraries",
         "operationId": "lists",
