@@ -1,7 +1,9 @@
 package edu.virginia.virgo;
 import java.nio.CharBuffer;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
@@ -12,6 +14,9 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.Trees;
 
 public class Main {
     
@@ -33,6 +38,11 @@ public class Main {
 
         String test_strs[]  = {
 /* not yet supported       "title:{(time OR fruit) AND flies}", */
+                "keyword:{}",
+                " keyword : { (calico OR tortoise shell) AND cats } ",
+                " keyword : { (calico OR \"tortoise shell\") } ",
+                " keyword : { (\"tortoise shell\" OR calico) AND cats } ",
+                           "keyword:{cincinnati, ohio (home of the :reds:)}",
                            "title:{bannanas}",
                            "keyword:{digby OR duncan}",
                            "keyword:{digby AND duncan}",
@@ -52,10 +62,10 @@ public class Main {
                            "date:{BEFORE 1945-12-06}",    // _query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"
                            "date:{AFTER 1945}",           // _query_:"{!lucene df=published_daterange}([1945 TO *])"
                            "date:{<1945} AND date:{>1932} AND author:{Shelly}", //  ( (_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])")  AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")
-                           "garbage:{1954}",
-                           "rubbish:{bananas}",
-                           "title:{bannanas}",
-                           "date:{1932 TO 1945} HELLOOOOO author:{Shelly}"
+                           "garbage:{1954}",   // should be error
+                           "rubbish:{bananas}",  // should be error
+                           "date:{1932 TO 1945} HELLOOOOO author:{Shelly}",  // should be error
+                           "keyword:{triceratops OR flameproof}",
                            };
 
 //        Reader reader = new BufferedReader(new FileReader(args[0]));
@@ -63,11 +73,13 @@ public class Main {
         boolean showTokens = false;
         boolean parseSolr = false;
         boolean parseEDS = false;
+        boolean showTree = false;
         if (args.length >= 1)
         {
             if (args[0].contains("tokens")) showTokens = true;
             if (args[0].contains("solr"))   parseSolr = true;
             if (args[0].contains("eds"))    parseEDS = true;
+            if (args[0].contains("tree"))   showTree = true;
         }
         else 
         {
@@ -79,6 +91,18 @@ public class Main {
         for (String test : test_strs)
         {
             if (showTokens)  showTokens(test);
+            if (showTree)
+            {
+                try { 
+                    String result = showParseTree(test);
+                    System.out.println(result);
+                }
+                catch (RuntimeException re)
+                {
+                    System.out.println("Error on query: "+ test);
+                    System.out.println(re.toString());
+                }
+            }
             if (parseSolr)
             {
                 try { 
@@ -111,6 +135,33 @@ public class Main {
         }
     }
 
+    public static String printSyntaxTree(Parser parser, ParseTree root) 
+    {
+        StringBuilder buf = new StringBuilder();
+        recursive(root, buf, 0, Arrays.asList(parser.getRuleNames()));
+        return buf.toString();
+    }
+
+    private static void recursive(ParseTree aRoot, StringBuilder buf, int offset, List<String> ruleNames) 
+    {
+        for (int i = 0; i < offset; i++) 
+        {
+            buf.append("  ");
+        }
+        buf.append(Trees.getNodeText(aRoot, ruleNames)).append("\n");
+        if (aRoot instanceof ParserRuleContext) 
+        {
+            ParserRuleContext prc = (ParserRuleContext) aRoot;
+            if (prc.children != null) 
+            {
+                for (ParseTree child : prc.children) 
+                {
+                    recursive(child, buf, offset + 1, ruleNames);
+                }
+            }
+        }
+    }
+
     public static String parseForSolr(String input)
     {
         MyErrorListener errorListener = new MyErrorListener();
@@ -131,6 +182,27 @@ public class Main {
         SimpleVisitor visitor = new SimpleVisitor();
         Value traverseResult = visitor.visit(tree);
         return traverseResult.asString();
+    }
+
+    public static String showParseTree(String input)
+    {
+        MyErrorListener errorListener = new MyErrorListener();
+
+        CharBuffer cb = CharBuffer.wrap(input.toCharArray());
+        CodePointBuffer cpb = CodePointBuffer.withChars(cb);
+        CharStream cs = CodePointCharStream.fromBuffer(cpb);
+
+        VirgoQueryLexer lexer = new VirgoQueryLexer(cs);
+        lexer.removeErrorListeners();
+        lexer.addErrorListener( errorListener );
+
+        VirgoQuery parser = new VirgoQuery(new CommonTokenStream(lexer));
+        parser.removeErrorListeners();
+        parser.addErrorListener( errorListener );
+
+        ParseTree tree = parser.query();
+        String pretty = printSyntaxTree(parser, tree);
+        return(pretty); 
     }
 
     public static String parseForEDS(String input)
