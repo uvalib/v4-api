@@ -26,7 +26,7 @@ RBRACKET : ']' ;
 LBRACE1 : '{' -> pushMode(SEARCH), type(LBRACE);
 RBRACE : '}' -> popMode;
 BOOLEAN1 : ('AND'|'OR'|'NOT') ->type(BOOLEAN) ;
-SEARCH_WORD : (~([{}" \t\r\n]))+ ;
+SEARCH_WORD : (~([{}()" \t\r\n]))+ ;
 WS2: WS -> skip;
 ERROR_CHARACTER2: . ->type(ERROR_CHARACTER);
 

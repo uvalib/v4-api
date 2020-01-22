@@ -12,6 +12,7 @@ query_parts :  query_parts boolean_op query_parts
             ;
 
 field_query : field_type COLON LBRACE search_string RBRACE
+            | field_type COLON LBRACE RBRACE
             | range_field_type COLON LBRACE range_search_string RBRACE
             ;
 
@@ -38,8 +39,10 @@ date_string : DATE_STRING ;
 
 search_string : LPAREN search_string RPAREN
               | search_string boolean_op search_string
-              | search_string search_part
-              | search_part 
+              | search_string search_string
+              | search_part
+              | LPAREN
+              | RPAREN 
               ;
 
 search_part : QUOTE search_part QUOTE

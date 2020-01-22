@@ -129,8 +129,15 @@ public class EDSVisitor {
         StringBuilder sb = new StringBuilder();
         
         String fieldType = this.visit(ctx.getChild(0)).asString();
-        Value query = this.visit(ctx.getChild(3));
-        expand(sb, fieldType, query);
+        if (ctx.getChild(3) instanceof TerminalNode)
+        {
+            expand(sb, fieldType, new Value("*"));
+        }
+        else 
+        {
+            Value query = this.visit(ctx.getChild(3));
+            expand(sb, fieldType, query);
+        }
         return new Value(sb.toString()); 
     }
 
@@ -241,6 +248,15 @@ public class EDSVisitor {
             return(new Value(result));
         }
         // search_string : LPAREN search_string RPAREN
+        else if (ctx.getChildCount() == 3 && ctx.getChild(0) instanceof TerminalNode && 
+                ((TerminalNode)ctx.getChild(0)).getSymbol().getType() == VirgoQueryLexer.LPAREN && 
+                ctx.getChild(2) instanceof TerminalNode && 
+                ((TerminalNode)ctx.getChild(2)).getSymbol().getType() == VirgoQueryLexer.RPAREN )
+        {
+            ParseTree c = ctx.getChild(1);
+            Value childResult = this.visit(c);
+            return(childResult);
+        }
         //               | search_string search_part
         //               | search_part 
         // for any non-boolean containing search string, simply concatenate the pieces together, with spaces added between them.
