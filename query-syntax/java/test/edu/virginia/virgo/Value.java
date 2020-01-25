@@ -50,6 +50,20 @@ public class Value {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        if (isArray())
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.append("[");
+            for (Value element : this.asArray())
+            {
+                sb.append(element.toString());
+            }
+            sb.append("]");
+            return(sb.toString());
+        }
+        else
+        {
+            return String.valueOf(value);
+        }
     }
 }

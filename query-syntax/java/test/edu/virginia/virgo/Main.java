@@ -33,17 +33,21 @@ public class Main {
               throw new RuntimeException("Syntax error occurred -- deal with it.");
         }
       };
+    public static boolean verbose = false;
     
     public static void main(String[] args) throws Exception {
 
         String test_strs[]  = {
 /* not yet supported       "title:{(time OR fruit) AND flies}", */
-                "keyword:{}",
+                "keyword: {(calico OR \"tortoise shell\") AND (cats OR dogs)}",
+                " keyword : { (calico OR \"tortoise shell\") AND cats } ",
+               "keyword:{}",
                 " keyword : { (calico OR tortoise shell) AND cats } ",
-                " keyword : { (calico OR \"tortoise shell\") } ",
                 " keyword : { (\"tortoise shell\" OR calico) AND cats } ",
                            "keyword:{cincinnati, ohio (home of the :reds:)}",
                            "title:{bannanas}",
+                           "title:{bananas ( a fruit }",  // should be error
+                           "title:{bananas a fruit ) }",  // should be error
                            "keyword:{digby OR duncan}",
                            "keyword:{digby AND duncan}",
                            "author:{Zhongguo Zang xue chu ban she  (publisher)}", 
@@ -74,12 +78,18 @@ public class Main {
         boolean parseSolr = false;
         boolean parseEDS = false;
         boolean showTree = false;
-        if (args.length >= 1)
+        int offset = 0;
+        if (args.length >= 1 && args[0].equals("-v"))
         {
-            if (args[0].contains("tokens")) showTokens = true;
-            if (args[0].contains("solr"))   parseSolr = true;
-            if (args[0].contains("eds"))    parseEDS = true;
-            if (args[0].contains("tree"))   showTree = true;
+            verbose = true;
+            offset = 1;
+        }
+        if (args.length >= offset+1)
+        {
+            if (args[offset].contains("tokens")) showTokens = true;
+            if (args[offset].contains("solr"))   parseSolr = true;
+            if (args[offset].contains("eds"))    parseEDS = true;
+            if (args[offset].contains("tree"))   showTree = true;
         }
         else 
         {
@@ -179,7 +189,7 @@ public class Main {
         parser.addErrorListener( errorListener );
 
         ParseTree tree = parser.query();
-        SimpleVisitor visitor = new SimpleVisitor();
+        SimpleVisitor visitor = new SimpleVisitor(verbose);
         Value traverseResult = visitor.visit(tree);
         return traverseResult.asString();
     }

@@ -1,4 +1,5 @@
 package edu.virginia.virgo;
+import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -6,6 +7,18 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 
 public class SimpleVisitor {
+
+    boolean verbose = false;
+    
+    public SimpleVisitor(boolean verbose)
+    {
+        setVerbose(verbose);
+    }
+    
+    public void setVerbose(boolean verbose)
+    {
+        this.verbose = verbose;
+    }
 
     public Value visit(ParseTree tree) 
     {
@@ -111,15 +124,18 @@ public class SimpleVisitor {
         
         StringBuilder sb = new StringBuilder();
         
+        CommonToken tok;
         String fieldType = this.visit(ctx.getChild(0)).asString();
+        String fieldName = ((CommonToken)(ctx.getChild(0).getChild(0).getPayload())).getText();
+
         if (ctx.getChild(3) instanceof TerminalNode)
         {
-            expand(sb, fieldType, new Value("*"));
+            expand(sb, fieldName, fieldType, new Value("*"));
         }
         else 
         {
             Value query = this.visit(ctx.getChild(3));
-            expand(sb, fieldType, query);
+            expand(sb, fieldName, fieldType, query);
         }
         return new Value(sb.toString()); 
     }
@@ -133,15 +149,19 @@ public class SimpleVisitor {
     // wrapped with parentheses to ensure proper operator precedence
     // e.g. this field_query :   title : {"susan sontag" OR music title} 
     //expands to this:           (_query_:"{!edismax qf=$title_qf pf=$title_pf}(\" susan sontag \")" OR _query_:"{!edismax qf=$title_qf pf=$title_pf}(music title)")
-    private void expand(StringBuilder sb, String fieldType, Value query)
+    private void expand(StringBuilder sb, String fieldName, String fieldType, Value query)
     {
+        if (verbose)
+        {
+            System.err.println("==> Expand inStr "+sb.toString()+" for field "+fieldName+", query: "+query);
+        }
         if (query.isArray())
         {
             Value[] parts = query.asArray();
             sb.append("(");
-            expand(sb, fieldType, parts[0]);
+            expand(sb, fieldName, fieldType, parts[0]);
             sb.append(parts[1].asString());
-            expand(sb, fieldType, parts[2]);
+            expand(sb, fieldName, fieldType, parts[2]);
             sb.append(")");
         }
         else
