@@ -41,8 +41,6 @@ search_string : LPAREN search_string RPAREN
               | search_string boolean_op search_string
               | search_string search_string
               | search_part
-              | LPAREN
-              | RPAREN 
               ;
 
 search_part : QUOTE search_part QUOTE
