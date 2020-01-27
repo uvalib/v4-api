@@ -37,14 +37,23 @@ range_search_string : date_string TO date_string
 
 date_string : DATE_STRING ;
 
-search_string : LPAREN search_string RPAREN
+search_string : QUOTE quoted_search_part QUOTE
+              | LPAREN search_string RPAREN
               | search_string boolean_op search_string
               | search_string search_string
               | search_part
               ;
 
-search_part : QUOTE search_part QUOTE
-            | search_part SEARCH_WORD
+search_part : search_part SEARCH_WORD
             | SEARCH_WORD
             ;
 
+quoted_search_part : quoted_search_part SEARCH_WORD
+                   | quoted_search_part LPAREN
+                   | quoted_search_part RPAREN
+                   | quoted_search_part boolean_op
+                   | SEARCH_WORD
+                   | LPAREN
+                   | RPAREN
+                   | boolean_op
+                   ;

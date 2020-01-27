@@ -39,6 +39,9 @@ public class Main {
 
         String test_strs[]  = {
 /* not yet supported       "title:{(time OR fruit) AND flies}", */
+                "keyword: {\"transmutation (chemistry)\"}", 
+                "keyword: {\"transmutation AND (chemistry)\"}",
+                "keyword: {(\"Death AND taxes\" OR \"war AND Peace\") AND (cats OR dogs)}",
                 "keyword: {(calico OR \"tortoise shell\") AND (cats OR dogs)}",
                 " keyword : { (calico OR \"tortoise shell\") AND cats } ",
                "keyword:{}",
@@ -75,6 +78,7 @@ public class Main {
 //        Reader reader = new BufferedReader(new FileReader(args[0]));
 //        ScriptLexer lexer = new ScriptLexer(reader);
         boolean showTokens = false;
+        boolean showInput = false;
         boolean parseSolr = false;
         boolean parseEDS = false;
         boolean showTree = false;
@@ -86,6 +90,7 @@ public class Main {
         }
         if (args.length >= offset+1)
         {
+            if (args[offset].contains("input"))  showInput = true;
             if (args[offset].contains("tokens")) showTokens = true;
             if (args[offset].contains("solr"))   parseSolr = true;
             if (args[offset].contains("eds"))    parseEDS = true;
@@ -93,13 +98,14 @@ public class Main {
         }
         else 
         {
-            showTokens = true;
+        	showInput = true;
             parseSolr = true;
-            parseEDS = true;
+            //parseEDS = true;
         }
 
         for (String test : test_strs)
         {
+            if (showInput)   System.out.println(test);
             if (showTokens)  showTokens(test);
             if (showTree)
             {
