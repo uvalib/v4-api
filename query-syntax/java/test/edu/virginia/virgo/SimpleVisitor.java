@@ -284,8 +284,18 @@ public class SimpleVisitor {
     protected Value aggregateResult(Value aggregate, Value nextResult) 
     {
         if (aggregate != null)
-            return new Value(aggregate.asString() + " " + nextResult.asString());
-        else return nextResult;
+        {
+        	if (aggregate.asString().endsWith("\"") || aggregate.asString().endsWith("(") ||
+        			nextResult.asString().startsWith("\"") || nextResult.asString().startsWith(")"))
+        	{
+        		return new Value(aggregate.asString() + nextResult.asString());
+        	}
+        	else 
+        	{
+        		return new Value(aggregate.asString() + " " + nextResult.asString());
+        	}
+        }
+        return nextResult;
     }
     
     public Value visitTerminal(TerminalNode node) 
