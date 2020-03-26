@@ -230,7 +230,7 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "TBD"
+        "bearerFormat": "JWT"
       }
     },
     "responses": {
@@ -253,6 +253,12 @@
           },
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/Sort"
+          },
+          "sort_options": {
+            "$ref": "#/components/schemas/SortOptions"
           },
           "group_list": {
             "$ref": "#/components/schemas/GroupList"
@@ -296,6 +302,7 @@
               "availability",
               "url",
               "image-url",
+              "boolean",
               "etc."
             ]
           },
@@ -397,6 +404,44 @@
             "type": "integer",
             "minimum": -1
           }
+        }
+      },
+      "Sort": {
+        "description": "Optional sorting specification.",
+        "properties": {
+          "sort_id": {
+            "description": "The ID of the sort, as reported by the pool in a search response.  (These may need to be coordinated globally among pools, if sorting will be a global feature.)",
+            "type": "string"
+          },
+          "order": {
+            "description": "The order in which results should be sorted.",
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ]
+          }
+        }
+      },
+      "SortOption": {
+        "description": "A single supported sorting option for this pool/search.",
+        "properties": {
+          "id": {
+            "description": "The (pool-specific?) ID for this sorting option.",
+            "type": "string"
+          },
+          "label": {
+            "description": "The localized label for this sorting option.",
+            "type": "string"
+          }
+        }
+      },
+      "SortOptions": {
+        "description": "A list of supported sorting options for this pool/search.",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/SortOption"
         }
       },
       "AvailableFacetList": {

@@ -119,7 +119,7 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "TBD"
+        "bearerFormat": "JWT"
       }
     },
     "responses": {
@@ -138,6 +138,9 @@
           },
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/Sort"
           },
           "filters": {
             "$ref": "#/components/schemas/Filters"
@@ -178,6 +181,23 @@
           "rows": {
             "description": "The number of items to request",
             "type": "integer"
+          }
+        }
+      },
+      "Sort": {
+        "description": "Optional sorting specification.",
+        "properties": {
+          "sort_id": {
+            "description": "The ID of the sort, as reported by the pool in a search response.  (These may need to be coordinated globally among pools, if sorting will be a global feature.)",
+            "type": "string"
+          },
+          "order": {
+            "description": "The order in which results should be sorted.",
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ]
           }
         }
       },
