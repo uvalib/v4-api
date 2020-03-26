@@ -408,6 +408,7 @@
       },
       "Sort": {
         "description": "Optional sorting specification.",
+        "type": "object",
         "properties": {
           "sort_id": {
             "description": "The ID of the sort, as reported by the pool in a search response.  (These may need to be coordinated globally among pools, if sorting will be a global feature.)",
@@ -425,6 +426,7 @@
       },
       "SortOption": {
         "description": "A single supported sorting option for this pool/search.",
+        "type": "object",
         "properties": {
           "id": {
             "description": "The (pool-specific?) ID for this sorting option.",
@@ -535,7 +537,40 @@
           "description": {
             "description": "The localized detailed description of this pool.  This should indicate what content is available in the pool, and can include the current status of the pool.",
             "type": "string"
+          },
+          "mode": {
+            "description": "The mode of this pool.",
+            "type": "string",
+            "enum": [
+              "record",
+              "image"
+            ]
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/PoolAttributes"
           }
+        }
+      },
+      "PoolAttribute": {
+        "description": "A specific pool attribute.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of this attribute.",
+            "type": "string"
+          },
+          "supported": {
+            "description": "Whether this attribute is supported.",
+            "type": "boolean"
+          }
+        }
+      },
+      "PoolAttributes": {
+        "description": "A list of attributes this pool may or may not support.",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "$ref": "#/components/schemas/PoolAttribute"
         }
       }
     }

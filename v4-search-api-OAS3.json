@@ -186,6 +186,7 @@
       },
       "Sort": {
         "description": "Optional sorting specification.",
+        "type": "object",
         "properties": {
           "sort_id": {
             "description": "The ID of the sort, as reported by the pool in a search response.  (These may need to be coordinated globally among pools, if sorting will be a global feature.)",
