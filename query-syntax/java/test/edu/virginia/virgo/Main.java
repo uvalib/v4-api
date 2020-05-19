@@ -38,16 +38,20 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         String test_strs[]  = {
-/* not yet supported       "title:{(time OR fruit) AND flies}", */
+        		"title:{(time OR fruit) AND flies}", 
+        		"filter: {data_source_f:libraetd  OR data_source_f:libraoc}",
+        		"keyword: {\"organic (chemistry)\"} AND filter: {data_source_f:libraetd  OR data_source_f:libraoc}",
+        		"keyword: {\"organic chemistry\"} AND ( filter: {data_source_f:libraetd}  OR filter:{data_source_f:libraoc})",
                 "keyword: {\"transmutation (chemistry)\"}", 
                 "keyword: {\"transmutation AND (chemistry)\"}",
+                "published:{New York City}",
                 "keyword: {(\"Death AND taxes\" OR \"war AND Peace\") AND (cats OR dogs)}",
                 "keyword: {(calico OR \"tortoise shell\") AND (cats OR dogs)}",
                 " keyword : { (calico OR \"tortoise shell\") AND cats } ",
                "keyword:{}",
                 " keyword : { (calico OR tortoise shell) AND cats } ",
                 " keyword : { (\"tortoise shell\" OR calico) AND cats } ",
-                           "keyword:{cincinnati, ohio (home of the :reds:)}",
+                           "keyword:{cin:cinnati, ohio (home of the :reds:)}",
                            "title:{bannanas}",
                            "title:{bananas ( a fruit }",  // should be error
                            "title:{bananas a fruit ) }",  // should be error
@@ -66,6 +70,7 @@ public class Main {
                            "date:{1945}",                 // _query_:"{!lucene df=published_daterange}(1945)"
                            "date:{BadDate}",                 // _query_:"{!lucene df=published_daterange}(1945)"
                            "date:{1945/12/07 TO 1949}",   // _query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"
+                           "date:{12-07-1945 TO  1949}",   // _query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"
                            "date:{BEFORE 1945-12-06}",    // _query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"
                            "date:{AFTER 1945}",           // _query_:"{!lucene df=published_daterange}([1945 TO *])"
                            "date:{<1945} AND date:{>1932} AND author:{Shelly}", //  ( (_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])")  AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")

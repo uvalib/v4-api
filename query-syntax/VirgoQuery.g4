@@ -20,7 +20,9 @@ field_type : TITLE
            | AUTHOR
            | SUBJECT
            | KEYWORD
+           | PUBLISHED
            | IDENTIFIER
+           | FILTER
            ;
 
 range_field_type : DATE

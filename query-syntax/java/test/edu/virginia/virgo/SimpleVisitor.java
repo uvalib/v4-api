@@ -164,9 +164,13 @@ public class SimpleVisitor {
             expand(sb, fieldName, fieldType, parts[2]);
             sb.append(")");
         }
+        else if (fieldType.length() == 0)
+        {
+            sb.append("_query_:\"(").append(query.toString()).append(")\"");
+        }
         else
         {
-            sb.append("_query_:\"{").append(fieldType).append("}(").append(query.toString()).append(")\"");
+        	sb.append("_query_:\"{").append(fieldType).append("}(").append(query.toString()).append(")\"");
         }
     }
 
@@ -191,7 +195,11 @@ public class SimpleVisitor {
         String fieldType = ctx.getChild(0).toString();
         String qf = "";
         String pf = ""; 
-        if (fieldType.equals("title") || fieldType.equals("subject") || fieldType.equals("author") || fieldType.equals("identifier"))
+        if (fieldType.equals("filter"))
+        {
+        	return new Value("");
+        }
+        if (!fieldType.equals("keyword"))
         {
             qf = "qf=$"+ fieldType + "_qf";
             pf = " pf=$"+ fieldType + "_pf";

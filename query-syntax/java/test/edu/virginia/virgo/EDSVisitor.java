@@ -163,7 +163,10 @@ public class EDSVisitor {
         }
         else
         {
-            sb./*append("(").*/append(fieldType).append(query.toString())/*.append(")")*/;
+            if (fieldType.equals("filter")) 
+            	sb./*append("(").*/append(query.toString().replaceAll("\\\\:", ":"))/*.append(")")*/;
+        	else
+            	sb./*append("(").*/append(fieldType).append(query.toString())/*.append(")")*/;
         }
     }
 
@@ -190,6 +193,8 @@ public class EDSVisitor {
         else if (fieldType.equals("subject")) result = "SU:";
         else if (fieldType.equals("identifier")) result = "IB:";
         else if (fieldType.equals("keyword")) result = "TX:";
+        else if (fieldType.equals("published")) result = "SO:";
+        else if (fieldType.equals("filter")) result = "filter";
         return new Value(result); 
     }
     
