@@ -39,7 +39,7 @@ range_search_string : date_string TO date_string
 
 date_string : DATE_STRING ;
 
-search_string : QUOTE quoted_search_part QUOTE
+search_string : QUOTE QUOTE_STR QUOTE
               | LPAREN search_string RPAREN
               | search_string boolean_op search_string
               | search_string search_string

@@ -278,12 +278,14 @@ public class SimpleVisitor {
         {
             for (int i = 0; i < ctx.getChildCount(); i++)  
             { 
-                if (i != 0) sb.append(" ");
+                ParseTree c = ctx.getChild(i);
+                Value childResult = this.visit(c);
+                int type = ( c instanceof TerminalNode) ? ((TerminalNode)c).getSymbol().getType() : 0;
+                if (i != 0 && (type != VirgoQueryLexer.QUOTE && type != VirgoQueryLexer.QUOTE_STR)) 
                 {
-                    ParseTree c = ctx.getChild(i);
-                    Value childResult = this.visit(c);
-                    sb.append(childResult.toString());
+                	sb.append(" ");
                 }
+                sb.append(childResult.toString());
             }
             return new Value(sb.toString()); 
         }

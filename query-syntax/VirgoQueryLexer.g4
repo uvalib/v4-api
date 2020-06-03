@@ -20,7 +20,7 @@ ERROR_CHARACTER: .;
 
 mode SEARCH;
 
-QUOTE : '"' ;
+QUOTE : '"' -> pushMode(IN_QUOTE);
 LPAREN2 : '(' ->type(LPAREN);
 RPAREN2 : ')' ->type(RPAREN);
 LBRACKET : '[' ;
@@ -44,3 +44,7 @@ RBRACE1 : '}' -> popMode, type(RBRACE);
 WS3: WS -> skip;
 ERROR_CHARACTER3: . ->type(ERROR_CHARACTER);
 
+mode IN_QUOTE;
+QUOTE_STR : (~["]+);
+QUOTE2 : '"' -> popMode, type(QUOTE);
+ERROR_CHARACTER4: . ->type(ERROR_CHARACTER);

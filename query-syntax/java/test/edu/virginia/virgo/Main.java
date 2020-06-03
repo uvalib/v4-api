@@ -38,13 +38,14 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         String test_strs[]  = {
-        		"title:{(time OR fruit) AND flies}", 
+        		"title:{(time OR fruit) AND flies}",
+        		"filter: {digital_collection_f:\"Kanopy Online Video Collection\"}",
         		"filter: {data_source_f:libraetd  OR data_source_f:libraoc}",
         		"keyword: {\"organic (chemistry)\"} AND filter: {data_source_f:libraetd  OR data_source_f:libraoc}",
         		"keyword: {\"organic chemistry\"} AND ( filter: {data_source_f:libraetd}  OR filter:{data_source_f:libraoc})",
                 "keyword: {\"transmutation (chemistry)\"}", 
                 "keyword: {\"transmutation AND (chemistry)\"}",
-                "published:{New York City}",
+                "published:{England}",
                 "keyword: {(\"Death AND taxes\" OR \"war AND Peace\") AND (cats OR dogs)}",
                 "keyword: {(calico OR \"tortoise shell\") AND (cats OR dogs)}",
                 " keyword : { (calico OR \"tortoise shell\") AND cats } ",
