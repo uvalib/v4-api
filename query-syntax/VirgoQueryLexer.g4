@@ -20,7 +20,7 @@ ERROR_CHARACTER: .;
 
 mode SEARCH;
 
-QUOTE : '"' -> pushMode(IN_QUOTE);
+QUOTE : (["\u201C\u201D]) -> pushMode(IN_QUOTE);
 LPAREN2 : '(' ->type(LPAREN);
 RPAREN2 : ')' ->type(RPAREN);
 LBRACKET : '[' ;
@@ -28,7 +28,7 @@ RBRACKET : ']' ;
 LBRACE1 : '{' -> pushMode(SEARCH), type(LBRACE);
 RBRACE : '}' -> popMode;
 BOOLEAN1 : ('AND'|'OR'|'NOT') ->type(BOOLEAN) ;
-SEARCH_WORD : (~([{}()" \t\r\n]))+ ;
+SEARCH_WORD : (~([{}()"\u201C\u201D \t\r\n]))+ ;
 WS2: WS -> skip;
 ERROR_CHARACTER2: . ->type(ERROR_CHARACTER);
 
@@ -45,6 +45,6 @@ WS3: WS -> skip;
 ERROR_CHARACTER3: . ->type(ERROR_CHARACTER);
 
 mode IN_QUOTE;
-QUOTE_STR : (~["]+);
-QUOTE2 : '"' -> popMode, type(QUOTE);
+QUOTE_STR : (~(["\u201C\u201D])+);
+QUOTE2 : (["\u201C\u201D]) -> popMode, type(QUOTE);
 ERROR_CHARACTER4: . ->type(ERROR_CHARACTER);

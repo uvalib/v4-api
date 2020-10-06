@@ -38,6 +38,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         String test_strs[]  = {
+                           "keyword:{“thomas jefferson”}",
         		"title:{(time OR fruit) AND flies}",
         		"filter: {digital_collection_f:\"Kanopy Online Video Collection\"}",
         		"filter: {data_source_f:libraetd  OR data_source_f:libraoc}",
@@ -78,6 +79,7 @@ public class Main {
                            "garbage:{1954}",   // should be error
                            "rubbish:{bananas}",  // should be error
                            "date:{1932 TO 1945} HELLOOOOO author:{Shelly}",  // should be error
+                           "keyword:{Protocol amending the 1980 tax convention with Canada  message from the President of the United States transmitting a protocol amending the 1980 convention between the United States of America and Canada with respect to taxes on income and on capital, signed at Ottawa on June 14, 1983, with a related exchange of notes}",
                            "keyword:{triceratops OR flameproof}",
                            };
 
