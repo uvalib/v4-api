@@ -38,6 +38,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         String test_strs[]  = {
+                "journal_title:{nature} AND title:{orangutan}",
                            "keyword:{“thomas jefferson”}",
         		"title:{(time OR fruit) AND flies}",
         		"filter: {digital_collection_f:\"Kanopy Online Video Collection\"}",
@@ -58,7 +59,6 @@ public class Main {
                            "title:{bananas ( a fruit }",  // should be error
                            "title:{bananas a fruit ) }",  // should be error
                            "keyword:{digby OR duncan}",
-                           "keyword:{digby AND duncan}",
                            "author:{Zhongguo Zang xue chu ban she  (publisher)}", 
                            "author:{ ʼJam-dbyangs-nyi-ma }",
                            "title:{Tragicheskai͡a istorii͡a kavkazskikh }",

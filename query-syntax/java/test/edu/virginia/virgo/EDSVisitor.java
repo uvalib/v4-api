@@ -190,6 +190,7 @@ public class EDSVisitor {
         String result = "";
         if (fieldType.equals("title")) result = "TI:";
         else if (fieldType.equals("author")) result = "AU:";
+        else if (fieldType.equals("journal_title")) result = "CO:";
         else if (fieldType.equals("subject")) result = "SU:";
         else if (fieldType.equals("identifier")) result = "IB:";
         else if (fieldType.equals("keyword")) result = "TX:";

@@ -7,6 +7,7 @@ RPAREN : ')' ;
 BOOLEAN : ('AND'|'OR'|'NOT') ;
 COLON : ':' ;
 TITLE : 'title';
+JOURNAL_TITLE : 'journal_title';
 AUTHOR : 'author';
 SUBJECT : 'subject';
 KEYWORD : 'keyword';

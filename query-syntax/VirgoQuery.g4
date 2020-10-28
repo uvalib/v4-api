@@ -17,6 +17,7 @@ field_query : field_type COLON LBRACE search_string RBRACE
             ;
 
 field_type : TITLE
+           | JOURNAL_TITLE
            | AUTHOR
            | SUBJECT
            | KEYWORD
