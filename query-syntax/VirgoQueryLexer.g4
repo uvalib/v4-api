@@ -11,6 +11,7 @@ JOURNAL_TITLE : 'journal_title';
 AUTHOR : 'author';
 SUBJECT : 'subject';
 KEYWORD : 'keyword';
+FULLTEXT : 'fulltext';
 PUBLISHED : 'published';
 IDENTIFIER : 'identifier';
 FILTER : 'filter';
