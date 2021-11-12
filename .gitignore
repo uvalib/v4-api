@@ -1,5 +1,7 @@
 query-syntax/java/generated
 bin
+local
+tmp
 .settings
 .project
 .classpath
