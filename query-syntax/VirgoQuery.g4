@@ -23,6 +23,7 @@ field_type : TITLE
            | KEYWORD
            | PUBLISHED
            | FULLTEXT
+           | SERIES
            | IDENTIFIER
            | FILTER
            ;

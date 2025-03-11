@@ -2,9 +2,9 @@ Optional: get desired version of antlr-complete jar from the following site, and
 
     https://www.antlr.org/download/index.html
 
-Set version of antlr jar in tool directory to use for the remaining commands, e.g. "4.7.2", "4.9.3", etc.
+Set version of antlr jar in tool directory to use for the remaining commands, e.g. "4.7.2", "4.9.3", "4.13.2", etc.
 
-    version="4.9.3"
+    version="4.13.2"
 
 Java target:
 

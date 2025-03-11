@@ -12,6 +12,7 @@ AUTHOR : 'author';
 SUBJECT : 'subject';
 KEYWORD : 'keyword';
 FULLTEXT : 'fulltext';
+SERIES : 'series';
 PUBLISHED : 'published';
 IDENTIFIER : 'identifier';
 FILTER : 'filter';
