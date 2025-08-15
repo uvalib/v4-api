@@ -24,7 +24,6 @@ field_type : TITLE
            | PUBLISHED
            | FULLTEXT
            | SERIES
-           | COLLECTION
            | IDENTIFIER
            | FILTER
            ;

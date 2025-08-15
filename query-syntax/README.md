@@ -1,6 +1,6 @@
 Optional: get desired version of antlr-complete jar from the following site, and place in tool/ directory:
 
-    https://www.antlr.org/download.html
+    https://www.antlr.org/download/index.html
 
 Set version of antlr jar in tool directory to use for the remaining commands, e.g. "4.7.2", "4.9.3", "4.13.2", etc.
 

@@ -39,7 +39,7 @@ public class Main {
 
         String test_strs[]  = {
                 "journal_title:{nature} AND title:{orangutan}",
-                "keyword:{“thomas jefferson”}",
+                           "keyword:{“thomas jefferson”}",
         		"title:{(time OR fruit) AND flies}",
         		"filter: {digital_collection_f:\"Kanopy Online Video Collection\"}",
         		"filter: {data_source_f:libraetd  OR data_source_f:libraoc}",
@@ -51,40 +51,39 @@ public class Main {
                 "keyword: {(\"Death AND taxes\" OR \"war AND Peace\") AND (cats OR dogs)}",
                 "keyword: {(calico OR \"tortoise shell\") AND (cats OR dogs)}",
                 " keyword : { (calico OR \"tortoise shell\") AND cats } ",
-                "keyword:{}",
+               "keyword:{}",
                 " keyword : { (calico OR tortoise shell) AND cats } ",
                 " keyword : { (\"tortoise shell\" OR calico) AND cats } ",
-                "keyword:{cin:cinnati, ohio (home of the :reds:)}",
-                "title:{bannanas}",
-                "title:{bananas ( a fruit }",  // should be error
-                "title:{bananas a fruit ) }",  // should be error
-                "keyword:{digby OR duncan}",
-                "author:{Zhongguo Zang xue chu ban she  (publisher)}", 
-                "author:{ ʼJam-dbyangs-nyi-ma }",
-                "title:{Tragicheskai͡a istorii͡a kavkazskikh }",
-                "author:{Немирович-Данченко, Василий Иванович}",
-                "title : {\"susan sontag\" OR (music title)}   AND keyword:{ Maunsell }" ,
-                "( title : {\"susan sontag\" OR (music title)}   AND keyword:{ Maunsell } ) OR author:{ liberty }" ,
-                "title : {\"susan sontag\" OR (music title)}   AND ( keyword:{ Maunsell } OR author:{ liberty } )" ,
-                " author: {lovecraft} AND title: {madness NOT dunwich}",
-                "identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR \"KJE5602.C73 2012\"}",
-                "title:{A = B}",
-                "date:{1945}",                 // _query_:"{!lucene df=published_daterange}(1945)"
-                "date:{BadDate}",                 // _query_:"{!lucene df=published_daterange}(1945)"
-                "date:{1945/12/07 TO 1949}",   // _query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"
-                "date:{12-07-1945 TO  1949}",   // _query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"
-                "date:{BEFORE 1945-12-06}",    // _query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"
-                "date:{AFTER 1945}",           // _query_:"{!lucene df=published_daterange}([1945 TO *])"
-                "date:{<1945} AND date:{>1932} AND author:{Shelly}", //  ( (_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])")  AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")
-                "garbage:{1954}",   // should be error
-                "rubbish:{bananas}",  // should be error
-                "date:{1932 TO 1945} HELLOOOOO author:{Shelly}",  // should be error
-                "keyword:{Protocol amending the 1980 tax convention with Canada  message from the President of the United States transmitting a protocol amending the 1980 convention between the United States of America and Canada with respect to taxes on income and on capital, signed at Ottawa on June 14, 1983, with a related exchange of notes}",
-                "keyword:{triceratops OR flameproof}",
-                "fulltext:{Protocol amending the 1980 tax convention with Canada  message from the President of the United States transmitting a protocol amending the 1980 convention between the United States of America and Canada with respect to taxes on income and on capital, signed at Ottawa on June 14, 1983, with a related exchange of notes}",
-                "series:{Early imprints}",
-                "collection: {UVA Press Collection }",
-            };
+                           "keyword:{cin:cinnati, ohio (home of the :reds:)}",
+                           "title:{bannanas}",
+                           "title:{bananas ( a fruit }",  // should be error
+                           "title:{bananas a fruit ) }",  // should be error
+                           "keyword:{digby OR duncan}",
+                           "author:{Zhongguo Zang xue chu ban she  (publisher)}", 
+                           "author:{ ʼJam-dbyangs-nyi-ma }",
+                           "title:{Tragicheskai͡a istorii͡a kavkazskikh }",
+                           "author:{Немирович-Данченко, Василий Иванович}",
+                           "title : {\"susan sontag\" OR (music title)}   AND keyword:{ Maunsell }" ,
+                           "( title : {\"susan sontag\" OR (music title)}   AND keyword:{ Maunsell } ) OR author:{ liberty }" ,
+                           "title : {\"susan sontag\" OR (music title)}   AND ( keyword:{ Maunsell } OR author:{ liberty } )" ,
+                           " author: {lovecraft} AND title: {madness NOT dunwich}",
+                           "identifier:{35007007606860  OR 9780754645733 OR 38083649 OR 2001020407  OR u5670758 OR \"KJE5602.C73 2012\"}",
+                           "title:{A = B}",
+                           "date:{1945}",                 // _query_:"{!lucene df=published_daterange}(1945)"
+                           "date:{BadDate}",                 // _query_:"{!lucene df=published_daterange}(1945)"
+                           "date:{1945/12/07 TO 1949}",   // _query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"
+                           "date:{12-07-1945 TO  1949}",   // _query_:"{!lucene df=published_daterange}([1945-12-07 TO 1949])"
+                           "date:{BEFORE 1945-12-06}",    // _query_:"{!lucene df=published_daterange}([* TO 1945-12-06])"
+                           "date:{AFTER 1945}",           // _query_:"{!lucene df=published_daterange}([1945 TO *])"
+                           "date:{<1945} AND date:{>1932} AND author:{Shelly}", //  ( (_query_:"{!lucene df=published_daterange}([* TO 1945])" AND _query_:"{!lucene df=published_daterange}([1932 TO *])")  AND _query_:"{!edismax qf=$author_qf pf=$author_pf}(Shelly)")
+                           "garbage:{1954}",   // should be error
+                           "rubbish:{bananas}",  // should be error
+                           "date:{1932 TO 1945} HELLOOOOO author:{Shelly}",  // should be error
+                           "keyword:{Protocol amending the 1980 tax convention with Canada  message from the President of the United States transmitting a protocol amending the 1980 convention between the United States of America and Canada with respect to taxes on income and on capital, signed at Ottawa on June 14, 1983, with a related exchange of notes}",
+                           "keyword:{triceratops OR flameproof}",
+                           "fulltext:{Protocol amending the 1980 tax convention with Canada  message from the President of the United States transmitting a protocol amending the 1980 convention between the United States of America and Canada with respect to taxes on income and on capital, signed at Ottawa on June 14, 1983, with a related exchange of notes}",
+                           "series:{Early imprints}",
+                           };
 
 //        Reader reader = new BufferedReader(new FileReader(args[0]));
 //        ScriptLexer lexer = new ScriptLexer(reader);

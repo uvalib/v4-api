@@ -13,7 +13,6 @@ SUBJECT : 'subject';
 KEYWORD : 'keyword';
 FULLTEXT : 'fulltext';
 SERIES : 'series';
-COLLECTION : 'collection';
 PUBLISHED : 'published';
 IDENTIFIER : 'identifier';
 FILTER : 'filter';
